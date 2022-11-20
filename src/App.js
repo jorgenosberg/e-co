@@ -1,25 +1,81 @@
-import logo from './logo.svg';
-import './App.css';
+import "./styles.css";
+import Container from "@mui/material/Container";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+import Calculator from "./pages/Calculator";
+import Statistics from "./pages/Statistics";
+import Settings from "./pages/Settings";
+import News from "./pages/News";
+import SignUp from "./pages/SignUp";
+import Account from "./pages/Account";
+import PageNotFound from "./pages/PageNotFound";
+import LogIn from "./pages/LogIn";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
-function App() {
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <NavbarWrapper />,
+    children: [
+      {
+        path: "/home",
+        element: <Home />
+      },
+      {
+        path: "/sign-up",
+        element: <SignUp />
+      },
+      {
+        path: "/log-in",
+        element: <LogIn />
+      },
+      {
+        path: "/statistics",
+        element: <Statistics />
+      },
+      {
+        path: "/news",
+        element: <News />
+      },
+      {
+        path: "/calculator",
+        element: <Calculator />
+      },
+      {
+        path: "/settings",
+        element: <Settings />
+      },
+      {
+        path: "/account",
+        element: <Account />
+      },
+      {
+        path: "*",
+        element: <PageNotFound />
+      }
+    ]
+  }
+]);
+
+function NavbarWrapper() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <Container
+        maxWidth="100%"
+        sx={{
+          display: "flex",
+          height: "calc(100vh - 64px)",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <Outlet />
+      </Container>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return <RouterProvider router={router} />;
+}
