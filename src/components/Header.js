@@ -1,0 +1,202 @@
+import * as React from "react";
+
+// MUI MATERIAL IMPORTS
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+
+// MUI ICONS IMPORTS
+import SettingsIcon from "@mui/icons-material/Settings";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import FlagIcon from "@mui/icons-material/Flag";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Brightness6Icon from "@mui/icons-material/Brightness6";
+
+// REACT ROUTER DOM IMPORTS
+import { Link } from "react-router-dom";
+
+const regionMenuOptions = [
+  { code: "EU", name: "Europe", currency: "EUR" },
+  { code: "US", name: "United States", currency: "USD" },
+  { code: "CA", name: "Canada", currency: "CAD" }
+];
+
+function Header() {
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElRegion, setAnchorElRegion] = React.useState(null);
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  const handleOpenRegionMenu = (event) => {
+    setAnchorElRegion(event.currentTarget);
+  };
+
+  const handleCloseRegionMenu = () => {
+    setAnchorElRegion(null);
+  };
+
+  return (
+    <AppBar position="static" sx={{ bgcolor: "white" }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Link to="/home">
+            <Box
+              component="img"
+              sx={{
+                width: 100,
+                flexGrow: 0,
+                display: "flex"
+              }}
+              alt="Logo"
+              src="images/logo.svg"
+            />
+          </Link>
+          <Box
+            sx={{ flexGrow: 1, display: "flex" }}
+            style={{ justifyContent: "center", alignItems: "center" }}
+          >
+            <Link to="/home" sx={{ textDecoration: "none" }}>
+              <Button variant="text" sx={{ color: "gray" }}>
+                HOME
+              </Button>
+            </Link>
+            <Link to="/calculator" sx={{ textDecoration: "none" }}>
+              <Button variant="text" sx={{ color: "gray" }}>
+                CALCULATOR
+              </Button>
+            </Link>
+
+            <Link to="/statistics" sx={{ textDecoration: "none" }}>
+              <Button variant="text" sx={{ color: "gray" }}>
+                STATISTICS
+              </Button>
+            </Link>
+
+            <Link to="/news" sx={{ textDecoration: "none" }}>
+              <Button variant="text" sx={{ color: "gray" }}>
+                NEWS
+              </Button>
+            </Link>
+          </Box>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Region & Currency">
+              <IconButton onClick={handleOpenRegionMenu} sx={{ p: 0 }}>
+                <FlagIcon />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElRegion}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              open={Boolean(anchorElRegion)}
+              onClose={handleCloseRegionMenu}
+            >
+              {regionMenuOptions.map((option) => (
+                <MenuItem
+                  disabled
+                  key={option.code}
+                  onClick={handleCloseUserMenu}
+                >
+                  <Box sx={{ mr: 1 }}>
+                    <img
+                      loading="lazy"
+                      width="20"
+                      src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                      srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                      alt="Selected region flag"
+                    />
+                  </Box>
+                  <Typography textAlign="center">{option.currency}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+            <Link to="/settings">
+              <Tooltip title="Settings">
+                <IconButton sx={{ p: 0, m: 0.5 }}>
+                  <SettingsIcon />
+                </IconButton>
+              </Tooltip>
+            </Link>
+            <Tooltip title="User Menu">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 0.5 }}>
+                <PersonRoundedIcon />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right"
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem
+                key="Account"
+                onClick={handleCloseUserMenu}
+                component={Link}
+                to="/account"
+              >
+                <AccountCircleIcon />
+                <Typography textAlign="center" sx={{ ml: 0.5 }}>
+                  Account
+                </Typography>
+              </MenuItem>
+
+              <MenuItem disabled key="Theme" onClick={handleCloseUserMenu}>
+                <Brightness6Icon />
+                <Typography textAlign="center" sx={{ ml: 0.5 }}>
+                  Theme
+                </Typography>
+              </MenuItem>
+              <Divider />
+              <MenuItem
+                key="Logout"
+                onClick={handleCloseUserMenu}
+                component={Link}
+                to="/log-in"
+              >
+                <LogoutIcon />
+                <Typography textAlign="center" sx={{ ml: 0.5 }}>
+                  Logout
+                </Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+}
+export default Header;
