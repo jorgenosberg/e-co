@@ -57,6 +57,13 @@ function Account() {
   };
 
   return (
+    <Container
+    sx={{
+      width: "75%",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    }}>
     <Grid container spacing={2}>
       <Grid item xs={6}>
         <Container>
@@ -168,10 +175,10 @@ function Account() {
             <Grid item xs={12} md={6}>
               <ConfirmPasswordField />
             </Grid>
-            <Grid item xs={12} md={5} lg={4}>
+            <Grid item xs={12} md={6}>
               <CountrySelector value={country} setValue={setCountry} />
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={6}>
               <TextField
                 required
                 variant="outlined"
@@ -225,6 +232,7 @@ function Account() {
         </Container>
       </Grid>
     </Grid>
+    </Container>
   );
 }
 
