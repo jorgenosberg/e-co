@@ -14,11 +14,15 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: "/e-co/",
+    path: "/",
     element: <NavbarWrapper />,
     children: [
       {
         path: "/home",
+        element: <Home />
+      },
+      {
+        path: "/",
         element: <Home />
       },
       {
@@ -55,7 +59,7 @@ const router = createBrowserRouter([
       }
     ]
   }
-]);
+], {basename: "/e-co"});
 
 function NavbarWrapper() {
   return (
