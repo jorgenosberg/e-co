@@ -14,7 +14,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/e-co/",
     element: <NavbarWrapper />,
     children: [
       {
