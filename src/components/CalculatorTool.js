@@ -242,14 +242,14 @@ function CalculatorTool() {
             Task
             <Tooltip title="Choose which task you are doing in order to help us find your answer">
               <IconButton sx={{ p: 0, ml: 0.5, mb: 0.5 }}>
-                <HelpOutlineIcon sx={{ color: "#f4bf37" }} fontSize="medium" />
+                <HelpOutlineIcon sx={{ color: "primary" }} fontSize="medium" />
               </IconButton>
             </Tooltip>
           </Typography>
         </Grid>
         <Grid item xs={1}>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <TaskIcon sx={{ color: "gray" }} />
+            <TaskIcon sx={{ color: "secondary" }} />
           </Box>
         </Grid>
         <Grid item xs={11}>
@@ -283,7 +283,7 @@ function CalculatorTool() {
               <Tooltip title="Select what you want to calculate">
                 <IconButton sx={{ p: 0, ml: 0.5, mb: 0.5 }}>
                   <HelpOutlineIcon
-                    sx={{ color: "#f4bf37" }}
+                    sx={{ color: "primary" }}
                     fontSize="medium"
                   />
                 </IconButton>
@@ -296,7 +296,7 @@ function CalculatorTool() {
               onChange={handleTypeChange}
             >
               <Box display="flex" justifyContent="center" alignItems="center">
-                <FunctionsIcon sx={{ color: "gray", mr: 1 }} />
+                <FunctionsIcon sx={{ color: "secondary", mr: 1 }} />
               </Box>
               <FormControlLabel
                 value="price"

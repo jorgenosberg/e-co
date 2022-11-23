@@ -30,7 +30,7 @@ const regionMenuOptions = [
   { code: "CA", name: "Canada", currency: "CAD" }
 ];
 
-function Header() {
+function Header(props) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElRegion, setAnchorElRegion] = React.useState(null);
 
@@ -51,7 +51,7 @@ function Header() {
   };
 
   return (
-    <AppBar position="static" sx={{ bgcolor: "white" }}>
+    <AppBar position="static" color="default">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to="/home">
@@ -63,39 +63,31 @@ function Header() {
                 display: "flex"
               }}
               alt="Logo"
-              src="images/logo.svg"
+              src={props.theme.palette.mode === "light" ? "images/logo.svg" : "images/logo-dark.svg"}
             />
           </Link>
           <Box
-            sx={{ flexGrow: 1, display: "flex" }}
+            sx={{ flexGrow: 1, display: "flex", }}
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            <Link to="/home" sx={{ textDecoration: "none" }}>
-              <Button variant="text" sx={{ color: "gray" }}>
+              <Button variant="text" component={Link} to="/home" sx={{color:"text.secondary", "&:hover": { color: "secondary.main" }}}>
                 HOME
               </Button>
-            </Link>
-            <Link to="/calculator" sx={{ textDecoration: "none" }}>
-              <Button variant="text" sx={{ color: "gray" }}>
+              <Button variant="text" component={Link} to="/calculator" sx={{color:"text.secondary", "&:hover": { color: "secondary.main" }}}>
                 CALCULATOR
               </Button>
-            </Link>
 
-            <Link to="/statistics" sx={{ textDecoration: "none" }}>
-              <Button variant="text" sx={{ color: "gray" }}>
+              <Button variant="text" component={Link} to="/statistics" sx={{color:"text.secondary", "&:hover": { color: "secondary.main" }}}>
                 STATISTICS
               </Button>
-            </Link>
 
-            <Link to="/news" sx={{ textDecoration: "none" }}>
-              <Button variant="text" sx={{ color: "gray" }}>
+              <Button variant="text" component={Link} to="/news" sx={{color:"text.secondary", "&:hover": { color: "secondary.main" }}}>
                 NEWS
               </Button>
-            </Link>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Region & Currency">
-              <IconButton onClick={handleOpenRegionMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleOpenRegionMenu} sx={{"&:hover": { color: "secondary.main" }}}>
                 <FlagIcon />
               </IconButton>
             </Tooltip>
@@ -134,15 +126,13 @@ function Header() {
                 </MenuItem>
               ))}
             </Menu>
-            <Link to="/settings">
               <Tooltip title="Settings">
-                <IconButton sx={{ p: 0, m: 0.5 }}>
+                <IconButton component={Link} to="/settings" sx={{"&:hover": { color: "secondary.main" }}}>
                   <SettingsIcon />
                 </IconButton>
               </Tooltip>
-            </Link>
             <Tooltip title="User Menu">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 0.5 }}>
+              <IconButton onClick={handleOpenUserMenu} sx={{"&:hover": { color: "secondary.main" }}}>
                 <PersonRoundedIcon />
               </IconButton>
             </Tooltip>
@@ -174,7 +164,7 @@ function Header() {
                 </Typography>
               </MenuItem>
 
-              <MenuItem disabled key="Theme" onClick={handleCloseUserMenu}>
+              <MenuItem key="Theme" onClick={props.colorMode.toggleColorMode}>
                 <Brightness6Icon />
                 <Typography textAlign="center" sx={{ ml: 0.5 }}>
                   Theme

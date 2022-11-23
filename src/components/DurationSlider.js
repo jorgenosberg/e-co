@@ -32,7 +32,7 @@ function DurationSlider() {
       </Typography>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={1}>
-          <AccessTimeFilledIcon sx={{ color: "gray" }} />
+          <AccessTimeFilledIcon sx={{ color: "primary" }} />
         </Grid>
         <Grid item xs={7.5} sx={{ mr: 1 }}>
           <Slider
