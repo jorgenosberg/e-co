@@ -4,6 +4,9 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import Typography from "@mui/material/Typography";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import IconButton from "@mui/material/IconButton";
+import { Tooltip as MuiTooltip } from "@mui/material/Tooltip";
 
 import {
   Chart as ChartJS,
@@ -16,10 +19,9 @@ import {
   Filler,
   Legend
 } from "chart.js";
+
 import { Line } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import IconButton from "@mui/material/IconButton";
 
 ChartJS.register(
   CategoryScale,
@@ -130,16 +132,14 @@ function Statistics() {
     ]
   };
 
-  const [anchorElExp, setAnchorElExp] = React.useState(null);
-  const handleOpenHelpMenu = (event) => {
-    setAnchorElExp(event.currentTarget);
-  };
   return (
     <Container>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} sx={{ textAlign: "center", mb: 5 }}>
           <InsertChartIcon fontSize="large" />
-          <Typography variant="h4">Statistics </Typography>
+          <Typography variant="h4">
+            Statistics{" "}
+          </Typography>
         </Grid>
         <Grid item xs={12} md={6} display="flex" justifyContent="space-evenly">
           <Button

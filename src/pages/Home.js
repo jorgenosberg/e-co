@@ -62,7 +62,7 @@ function Home() {
                 >
                   <IconButton onClick={handleOpenHelpMenu} sx={{ p: 0 }}>
                     <HelpOutlineIcon
-                      sx={{ color: "#f4bf37" }}
+                      sx={{ color: "primary" }}
                       fontSize="large"
                     />
                   </IconButton>
@@ -78,7 +78,7 @@ function Home() {
                 >
                   <IconButton onClick={handleOpenHelpMenu} sx={{ p: 0 }}>
                     <HelpOutlineIcon
-                      sx={{ color: "#f4bf37" }}
+                      sx={{ color: "primary" }}
                       fontSize="large"
                     />
                   </IconButton>

@@ -22,10 +22,6 @@ const feedSources = [
 ];
 
 function News() {
-  const [anchorElHelp, setAnchorElHelp] = React.useState(null);
-  const handleOpenHelpMenu = (event) => {
-    setAnchorElHelp(event.currentTarget);
-  };
   const [value, setValue] = React.useState({
     value: {
       tag: "Energy",
@@ -40,8 +36,8 @@ function News() {
           <Typography variant="h4" align="center">
             Energy News{" "}
             <Tooltip title="On this page we have compiled a little selection of news about different topics related to energy and sustainability. Please select a topic from the dropdown to access the feed.">
-              <IconButton onClick={handleOpenHelpMenu} sx={{ p: 0 }}>
-                <HelpOutlineIcon sx={{ color: "#f4bf37" }} fontSize="large" />
+              <IconButton sx={{ p: 0 }}>
+                <HelpOutlineIcon sx={{ color: "primary" }} fontSize="large" />
               </IconButton>
             </Tooltip>
           </Typography>

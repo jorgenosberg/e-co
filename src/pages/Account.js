@@ -77,7 +77,7 @@ function Account() {
                 alignItems: "center"
               }}
             >
-              <PaletteIcon fontSize="large" sx={{ color: "gray" }} />
+              <PaletteIcon fontSize="large" sx={{ color: "primary" }} />
             </Grid>
             <Grid item xs={12} sx={{ mb: 2 }}>
               <Typography variant="h5" align="center" fontWeight="bold">
@@ -137,7 +137,7 @@ function Account() {
                 alignItems: "center"
               }}
             >
-              <AccountCircleIcon fontSize="large" sx={{ color: "gray" }} />
+              <AccountCircleIcon fontSize="large" sx={{ color: "primary" }} />
             </Grid>
             <Grid item xs={12} sx={{ mb: 2 }}>
               <Typography variant="h5" align="center" fontWeight="bold">
