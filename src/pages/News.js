@@ -40,9 +40,10 @@ function News() {
         <Grid item xs={12} md={10} sx={{ textAlign: "center" }}>
           <Typography variant="h4" align="center">
             Energy News{" "}
-            <Tooltip title="On this page we have compiled a little selection of news about different topics related to energy and sustainability. Please select a topic from the dropdown to access the feed.">
+            <Tooltip title="On this page we have compiled a little selection of news about different topics related to energy and sustainability. Please select a topic from the dropdown to access the feed."
+            placement="right-start">
               <IconButton sx={{ p: 0 }}>
-                <HelpOutlineIcon sx={{ color: "primary" }} fontSize="large" />
+                <HelpOutlineIcon sx={{ color: "secondary.main" }} fontSize="large" />
               </IconButton>
             </Tooltip>
           </Typography>
