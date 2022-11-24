@@ -14,7 +14,6 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import SaveIcon from "@mui/icons-material/Save";
 import Snackbar from "@mui/material/Snackbar";
-import ThemeSwitch from "../components/ThemeSwitch";
 
 function Settings() {
   const [type, setType] = React.useState("price");
