@@ -19,7 +19,8 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import FlagIcon from "@mui/icons-material/Flag";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
-import Brightness6Icon from "@mui/icons-material/Brightness6";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 // REACT ROUTER DOM IMPORTS
 import { Link } from "react-router-dom";
@@ -137,7 +138,7 @@ function Header(props) {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: "40px", color:"default"}}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -157,6 +158,7 @@ function Header(props) {
                 onClick={handleCloseUserMenu}
                 component={Link}
                 to="/account"
+                sx={{"&:hover": { color: "secondary.main" }}}
               >
                 <AccountCircleIcon />
                 <Typography textAlign="center" sx={{ ml: 0.5 }}>
@@ -164,8 +166,8 @@ function Header(props) {
                 </Typography>
               </MenuItem>
 
-              <MenuItem key="Theme" onClick={props.colorMode.toggleColorMode}>
-                <Brightness6Icon />
+              <MenuItem key="Theme" onClick={props.colorMode.toggleColorMode} sx={{"&:hover": { color: "secondary.main" }}}>
+                {props.theme.palette.mode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
                 <Typography textAlign="center" sx={{ ml: 0.5 }}>
                   Theme
                 </Typography>
@@ -175,7 +177,8 @@ function Header(props) {
                 key="Logout"
                 onClick={handleCloseUserMenu}
                 component={Link}
-                to="/log-in"
+                to="/login"
+                sx={{"&:hover": { color: "secondary.main" }}}
               >
                 <LogoutIcon />
                 <Typography textAlign="center" sx={{ ml: 0.5 }}>
