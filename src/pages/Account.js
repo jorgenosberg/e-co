@@ -8,7 +8,6 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import CountrySelector from "../components/CountrySelector";
 import PasswordField from "../components/PasswordField";
-import ConfirmPasswordField from "../components/ConfirmPasswordField";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
@@ -21,6 +20,10 @@ import ThemeSwitch from "../components/ThemeSwitch";
 import PaletteIcon from "@mui/icons-material/Palette";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
+import { auth, db } from "../api/firebase";
+import { updateEmail, updatePassword, updateProfile } from "firebase/auth";
+import { onValue, ref, update } from "firebase/database";
+import { UserContext } from "../App";
 
 const regionMenuOptions = [
   { code: "EU", name: "Europe", currency: "EUR" },
@@ -29,8 +32,11 @@ const regionMenuOptions = [
 ];
 
 function Account() {
-  const [email, setEmail] = React.useState("abc@gmail.com");
-  const [phone, setPhone] = React.useState("6 34 81 93 20");
+  const user = React.useContext(UserContext);
+  const [email, setEmail] = React.useState("");
+  const [phone, setPhoneNumber] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
   const [country, setCountry] = React.useState({
     code: "FR",
     label: "France",
@@ -38,200 +44,240 @@ function Account() {
     suggested: true
   });
   const [region, setRegion] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState({});
+
+  React.useEffect(() => {
+    onValue(ref(db, `users/${user.uid}`), snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        setEmail(data.email);
+        setPhoneNumber(data.phoneNumber);
+        setCountry(data.country);
+      }
+    })
+  }, [])
 
   const handleRegionChange = (event) => {
     setRegion(event.target.value);
   };
-  const [open, setOpen] = React.useState(false);
 
-  const handleClick = () => {
+  const handleSuccess = () => {
     setOpen(true);
+    setMessage({ type: "success", text: "Profile updated successfully" })
+  };
+
+  const handleError = (message) => {
+    setOpen(true);
+    setMessage({ type: "error", text: message })
   };
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
+  const updateUser = async () => {
+    try {
+      if (password && confirmPassword) {
+        if (password === confirmPassword) {
+          await updatePassword(user, password);
+          setPassword(""); setConfirmPassword("");
+        }
+        else {
+          handleError("Passwords do not match");
+          return;
+        }
+      }
+
+      if (email !== user.email)
+        await updateEmail(auth.currentUser, email);
+      update(ref(db, `users/${user.uid}`), { email: email, country: country, phoneNumber: phone });
+      handleSuccess();
+    } catch (error) {
+      console.error(error)
+      handleError("Error in updating profile");
+    }
+  }
+
   return (
     <Container
-    sx={{
-      width: "75%",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    }}>
-    <Grid container spacing={2}>
-      <Grid item xs={6}>
-        <Container>
-          <Grid container spacing={2}>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <PaletteIcon fontSize="large" sx={{ color: "primary" }} />
+      sx={{
+        width: "75%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          <Container>
+            <Grid container spacing={2}>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <PaletteIcon fontSize="large" sx={{ color: "primary" }} />
+              </Grid>
+              <Grid item xs={12} sx={{ mb: 2 }}>
+                <Typography variant="h5" align="center" fontWeight="bold">
+                  Customization
+                </Typography>
+                <Divider />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  Default color theme (currently disabled):
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <ThemeSwitch />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  Preferred region and currency:
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <Select value={region} onChange={handleRegionChange}>
+                    {regionMenuOptions.map((option) => (
+                      <MenuItem key={option.code} value={option.name}>
+                        <Grid container>
+                          <Box sx={{ mr: 1 }}>
+                            <img
+                              loading="lazy"
+                              width="20"
+                              src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                              srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                              alt="Selected region flag"
+                            />
+                          </Box>
+                          <Typography textAlign="center">
+                            {option.currency}
+                          </Typography>
+                        </Grid>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
-            <Grid item xs={12} sx={{ mb: 2 }}>
-              <Typography variant="h5" align="center" fontWeight="bold">
-                Customization
-              </Typography>
-              <Divider />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body2">
-                Default color theme (currently disabled):
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <ThemeSwitch />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body2">
-                Preferred region and currency:
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <Select value={region} onChange={handleRegionChange}>
-                  {regionMenuOptions.map((option) => (
-                    <MenuItem key={option.code} value={option.name}>
-                      <Grid container>
-                        <Box sx={{ mr: 1 }}>
-                          <img
-                            loading="lazy"
-                            width="20"
-                            src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                            srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                            alt="Selected region flag"
-                          />
-                        </Box>
-                        <Typography textAlign="center">
-                          {option.currency}
-                        </Typography>
-                      </Grid>
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Container>
-      </Grid>
-      <Grid item xs={6}>
-        <Container>
-          <Grid container spacing={2} justifyContent="">
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <AccountCircleIcon fontSize="large" sx={{ color: "primary" }} />
-            </Grid>
-            <Grid item xs={12} sx={{ mb: 2 }}>
-              <Typography variant="h5" align="center" fontWeight="bold">
-                Account Settings
-              </Typography>
-              <Divider />
-            </Grid>
+          </Container>
+        </Grid>
+        <Grid item xs={6}>
+          <Container>
+            <Grid container spacing={2} justifyContent="">
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <AccountCircleIcon fontSize="large" sx={{ color: "primary" }} />
+              </Grid>
+              <Grid item xs={12} sx={{ mb: 2 }}>
+                <Typography variant="h5" align="center" fontWeight="bold">
+                  Account Settings
+                </Typography>
+                <Divider />
+              </Grid>
 
-            <Grid item xs={12}>
-              <TextField
-                required
-                variant="outlined"
-                id="email-field"
-                name="Email"
-                label="Email"
-                type="email"
-                sx={{ width: "100%" }}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <AccountBoxIcon />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body2">Change password</Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <PasswordField />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <ConfirmPasswordField />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <CountrySelector value={country} setValue={setCountry} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                required
-                variant="outlined"
-                id="phone-field-body"
-                name="Phone number"
-                label="Phone number"
-                type="phone"
-                sx={{ width: "100%" }}
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <PhoneIcon />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Button
-                variant="contained"
-                startIcon={<SaveIcon />}
-                onClick={handleClick}
-              >
-                Save
-              </Button>
-              <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-              >
-                <Alert
-                  onClose={handleClose}
-                  severity="success"
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  variant="outlined"
+                  id="email-field"
+                  name="Email"
+                  label="Email"
+                  type="email"
                   sx={{ width: "100%" }}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountBoxIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2">Change password</Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <PasswordField label={"Password"} password={password} setPassword={setPassword} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <PasswordField label={"Confirm password"} password={confirmPassword} setPassword={setConfirmPassword} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <CountrySelector value={country} setValue={setCountry} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  required
+                  variant="outlined"
+                  id="phone-field-body"
+                  name="Phone number"
+                  label="Phone number"
+                  type="phone"
+                  sx={{ width: "100%" }}
+                  value={phone}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PhoneIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Button
+                  variant="contained"
+                  startIcon={<SaveIcon />}
+                  onClick={updateUser}
                 >
-                  Profile updated successfully
-                </Alert>
-              </Snackbar>
+                  Save
+                </Button>
+                <Snackbar
+                  open={open}
+                  autoHideDuration={6000}
+                  onClose={handleClose}
+                >
+                  <Alert
+                    onClose={handleClose}
+                    severity={message.type}
+                    sx={{ width: "100%" }}
+                  >
+                    {message.text}
+                  </Alert>
+                </Snackbar>
+              </Grid>
             </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        </Grid>
       </Grid>
-    </Grid>
     </Container>
   );
 }

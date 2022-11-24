@@ -10,21 +10,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 
-function PasswordField() {
-  const [values, setValues] = React.useState({
-    password: "",
-    showPassword: false
-  });
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+function PasswordField({ label, password, setPassword }) {
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword
-    });
+    setShowPassword(!showPassword);
   };
 
   const handleMouseDownPassword = (event) => {
@@ -34,11 +24,10 @@ function PasswordField() {
   return (
     <TextField
       required
-      id="outlined-adornment-password"
-      type={values.showPassword ? "text" : "password"}
-      value={values.password}
-      onChange={handleChange("password")}
-      label="Password"
+      type={showPassword ? "text" : "password"}
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      label={label}
       sx={{ width: "100%" }}
       InputProps={{
         startAdornment: (
@@ -54,7 +43,7 @@ function PasswordField() {
               onMouseDown={handleMouseDownPassword}
               edge="end"
             >
-              {values.showPassword ? <VisibilityOff /> : <Visibility />}
+              {showPassword ? <VisibilityOff /> : <Visibility />}
             </IconButton>
           </InputAdornment>
         )

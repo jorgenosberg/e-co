@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { faker } from "@faker-js/faker";
 import { Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import InsertQuestionOutline from "@mui/icons-material/HelpOutline";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
 import IconButton from "@mui/material/IconButton";
-import { QuestionMarkOutlined } from "@mui/icons-material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 function Home() {
@@ -18,15 +13,7 @@ function Home() {
   const handleOpenHelpMenu = (event) => {
     setAnchorElHelp(event.currentTarget);
   };
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
 
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
-  const [isShown, setIsShown] = useState(false);
-  const [isShown2, setIsShown2] = useState(false);
   function randomNumberGenerator() {
     return faker.datatype.float({ min: 200, max: 600, precision: 0.01 });
   }
@@ -39,6 +26,7 @@ function Home() {
   const b = Number(c);
   const [num] = useState(a);
   const [num1] = useState(b);
+
   return (
     <Container>
       <Grid container spacing={2} justifyContent="center">

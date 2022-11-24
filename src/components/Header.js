@@ -24,6 +24,8 @@ import Brightness6Icon from "@mui/icons-material/Brightness6";
 // REACT ROUTER DOM IMPORTS
 import { Link } from "react-router-dom";
 
+import { logOut } from "../api/auth";
+
 const regionMenuOptions = [
   { code: "EU", name: "Europe", currency: "EUR" },
   { code: "US", name: "United States", currency: "USD" },
@@ -40,6 +42,7 @@ function Header(props) {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+    logOut();
   };
 
   const handleOpenRegionMenu = (event) => {
@@ -70,24 +73,24 @@ function Header(props) {
             sx={{ flexGrow: 1, display: "flex", }}
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-              <Button variant="text" component={Link} to="/home" sx={{color:"text.secondary", "&:hover": { color: "secondary.main" }}}>
-                HOME
-              </Button>
-              <Button variant="text" component={Link} to="/calculator" sx={{color:"text.secondary", "&:hover": { color: "secondary.main" }}}>
-                CALCULATOR
-              </Button>
+            <Button variant="text" component={Link} to="/home" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+              HOME
+            </Button>
+            <Button variant="text" component={Link} to="/calculator" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+              CALCULATOR
+            </Button>
 
-              <Button variant="text" component={Link} to="/statistics" sx={{color:"text.secondary", "&:hover": { color: "secondary.main" }}}>
-                STATISTICS
-              </Button>
+            <Button variant="text" component={Link} to="/statistics" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+              STATISTICS
+            </Button>
 
-              <Button variant="text" component={Link} to="/news" sx={{color:"text.secondary", "&:hover": { color: "secondary.main" }}}>
-                NEWS
-              </Button>
+            <Button variant="text" component={Link} to="/news" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+              NEWS
+            </Button>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Region & Currency">
-              <IconButton onClick={handleOpenRegionMenu} sx={{"&:hover": { color: "secondary.main" }}}>
+              <IconButton onClick={handleOpenRegionMenu} sx={{ "&:hover": { color: "secondary.main" } }}>
                 <FlagIcon />
               </IconButton>
             </Tooltip>
@@ -126,13 +129,13 @@ function Header(props) {
                 </MenuItem>
               ))}
             </Menu>
-              <Tooltip title="Settings">
-                <IconButton component={Link} to="/settings" sx={{"&:hover": { color: "secondary.main" }}}>
-                  <SettingsIcon />
-                </IconButton>
-              </Tooltip>
+            <Tooltip title="Settings">
+              <IconButton component={Link} to="/settings" sx={{ "&:hover": { color: "secondary.main" } }}>
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="User Menu">
-              <IconButton onClick={handleOpenUserMenu} sx={{"&:hover": { color: "secondary.main" }}}>
+              <IconButton onClick={handleOpenUserMenu} sx={{ "&:hover": { color: "secondary.main" } }}>
                 <PersonRoundedIcon />
               </IconButton>
             </Tooltip>

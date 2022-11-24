@@ -19,8 +19,12 @@ import PageNotFound from './pages/PageNotFound';
 import LogIn from './pages/LogIn';
 // Router imports
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+// Firebase imports
+import { auth } from './api/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
+export const UserContext = React.createContext({});
 
 export default function App() {
   const router = createBrowserRouter([
@@ -70,7 +74,7 @@ export default function App() {
         }
       ]
     }
-  ], {basename: "/e-co"});
+  ], { basename: "/e-co" });
 
   const [mode, setMode] = React.useState('light');
   const colorMode = React.useMemo(
@@ -99,9 +103,25 @@ export default function App() {
   );
 
   function NavbarWrapper() {
+    const [user, setUser] = React.useState({});
+
+    React.useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUser(user);
+        } else {
+          console.log('User signed out');
+        }
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }, [])
+
     return (
-      <div>
-        <Header colorMode={colorMode} theme={theme}/>
+      <UserContext.Provider value={user}>
+        <Header colorMode={colorMode} theme={theme} />
         <Container
           maxWidth="100%"
           sx={{
@@ -113,7 +133,7 @@ export default function App() {
         >
           <Outlet />
         </Container>
-      </div>
+      </UserContext.Provider>
     );
   }
 

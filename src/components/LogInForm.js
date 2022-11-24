@@ -1,4 +1,5 @@
 import * as React from "react";
+import Alert from "@mui/material/Alert";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
@@ -9,8 +10,34 @@ import Avatar from "@mui/material/Avatar";
 import InputAdornment from "@mui/material/InputAdornment";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
+import Snackbar from "@mui/material/Snackbar";
+import { useNavigate } from "react-router-dom";
+import { signIn } from "../api/auth";
 
 function LogInForm() {
+  const navigate = useNavigate();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+
+  const logIn = async () => {
+    try {
+      await signIn(email, password);
+      navigate("/home");
+    } catch (error) {
+      setOpen(true);
+    }
+  }
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
   return (
     <Container
       sx={{
@@ -37,10 +64,11 @@ function LogInForm() {
           <TextField
             required
             variant="outlined"
-            id="username-field"
-            name="Username"
-            label="Username"
+            id="email-field"
+            name="Email"
+            label="Email"
             type="email"
+            onChange={e => setEmail(e.target.value)}
             sx={{ width: "100%" }}
             InputProps={{
               startAdornment: (
@@ -52,7 +80,7 @@ function LogInForm() {
           />
         </Grid>
         <Grid item xs={12}>
-          <PasswordField />
+          <PasswordField label={"Password"} password={password} setPassword={setPassword} />
         </Grid>
 
         <Grid
@@ -64,16 +92,13 @@ function LogInForm() {
             alignItems: "center"
           }}
         >
-          <Link to="/home">
-            <Button
-              variant="contained"
-              size="large"
-              component={Link}
-              to="/home"
-            >
-              Log In
-            </Button>
-          </Link>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={logIn}
+          >
+            Log In
+          </Button>
         </Grid>
         <Grid
           item
@@ -90,6 +115,19 @@ function LogInForm() {
           </Typography>
         </Grid>
       </Grid>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Invalid credentials. Please check your username and password.
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }
