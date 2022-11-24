@@ -18,11 +18,11 @@ import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import SaveIcon from "@mui/icons-material/Save";
 import Snackbar from "@mui/material/Snackbar";
-import ThemeSwitch from "../components/ThemeSwitch";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from '@mui/material/FormControlLabel';
 import PaletteIcon from "@mui/icons-material/Palette";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import MenuItem from "@mui/material/MenuItem";
-import {ThemeProvider} from '@mui/material/styles';
 
 const regionMenuOptions = [
   { code: "EU", name: "Europe", currency: "EUR" },
@@ -98,9 +98,7 @@ function Account(props) {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <ThemeProvider theme={props.theme}>
-                <ThemeSwitch colorMode={props.colorMode} theme={props.theme}/>
-                </ThemeProvider>
+                <FormControlLabel control={<Switch defaultChecked={props.theme.palette.mode === "light"} onChange={props.colorMode.toggleColorMode}/>} label={props.theme.palette.mode === "dark" ? "Dark mode" : "Default theme"} />
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2">
