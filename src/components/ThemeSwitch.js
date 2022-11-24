@@ -1,9 +1,9 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
+import { styled, withTheme} from "@mui/material/styles";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
-const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+const MaterialUISwitch = styled(withTheme(Switch))(({ theme }) => ({
   width: 62,
   height: 34,
   padding: 7,
@@ -50,19 +50,18 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   }
 }));
 
-function ThemeSwitch() {
-  const [checked, setChecked] = React.useState(true);
+function ThemeSwitch(props) {
+  const [checked, setChecked] = React.useState(props.theme.palette.mode === "light");
 
   const toggleChecked = () => {
     setChecked((prev) => !prev);
+    props.colorMode.toggleColorMode();
   };
   return (
     <FormControlLabel
       control={
         <MaterialUISwitch
-          disabled
           sx={{ m: 1 }}
-          defaultChecked
           onChange={toggleChecked}
         />
       }
