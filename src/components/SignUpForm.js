@@ -13,6 +13,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import Avatar from "@mui/material/Avatar";
 import InputAdornment from "@mui/material/InputAdornment";
 import Link from "@mui/material/Link";
+import {Link as NavLink} from 'react-router-dom'
 import Typography from "@mui/material/Typography";
 
 function SignUpForm() {
@@ -20,7 +21,7 @@ function SignUpForm() {
   return (
     <Container
       sx={{
-        width: "50%",
+        width: "35%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
@@ -37,7 +38,7 @@ function SignUpForm() {
             marginBottom: 3
           }}
         >
-          <Avatar fontSize="large" />
+          <Avatar sx={{width:"70px", height:"70px"}} />
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -63,10 +64,10 @@ function SignUpForm() {
         <Grid item xs={12} md={6}>
           <ConfirmPasswordField />
         </Grid>
-        <Grid item xs={12} md={5} lg={4}>
+        <Grid item xs={12} md={6}>
           <CountrySelector value={country} setValue={setCountry} />
         </Grid>
-        <Grid item xs={12} md={7}>
+        <Grid item xs={12} md={6}>
           <TextField
             required
             variant="outlined"
@@ -125,7 +126,7 @@ function SignUpForm() {
           }}
         >
           <Typography>
-            Already have an account? <Link to="/log-in">Log in</Link>
+            Already have an account?{" "}<Link to="/login" component={NavLink}>Log In</Link>
           </Typography>
         </Grid>
       </Grid>
