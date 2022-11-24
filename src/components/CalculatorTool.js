@@ -240,19 +240,19 @@ function CalculatorTool() {
         <Grid item xs={12}>
           <Typography>
             Task
-            <Tooltip title="Choose which task you are doing in order to help us find your answer">
+            <Tooltip title="Choose which task you are doing in order to help us find your answer" placement="right">
               <IconButton sx={{ p: 0, ml: 0.5, mb: 0.5 }}>
-                <HelpOutlineIcon sx={{ color: "primary" }} fontSize="medium" />
+                <HelpOutlineIcon sx={{ color: "secondary.main" }} fontSize="medium" />
               </IconButton>
             </Tooltip>
           </Typography>
         </Grid>
-        <Grid item xs={1}>
-          <Box display="flex" justifyContent="center" alignItems="center">
+        <Grid item xs={0.5}>
+          <Box display="flex" justifyContent="left" alignItems="left">
             <TaskIcon sx={{ color: "secondary" }} />
           </Box>
         </Grid>
-        <Grid item xs={11}>
+        <Grid item xs={11.5}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-helper-label">
               Select task
@@ -280,10 +280,10 @@ function CalculatorTool() {
           <FormControl>
             <Typography>
               Type
-              <Tooltip title="Select what you want to calculate">
+              <Tooltip title="Select what you want to calculate" placement="right">
                 <IconButton sx={{ p: 0, ml: 0.5, mb: 0.5 }}>
                   <HelpOutlineIcon
-                    sx={{ color: "primary" }}
+                    sx={{ color: "secondary.main" }}
                     fontSize="medium"
                   />
                 </IconButton>
