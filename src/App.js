@@ -1,22 +1,22 @@
-import * as React from 'react';
+import * as React from "react";
 // Style imports
-import './styles.css';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import "./styles.css";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 // MUI component imports
-import Container from '@mui/material/Container';
+import Container from "@mui/material/Container";
 // Custom component imports
-import Header from './components/Header';
+import Header from "./components/Header";
 // Custom page imports
-import Home from './pages/Home';
-import Calculator from './pages/Calculator';
-import Statistics from './pages/Statistics';
-import Settings from './pages/Settings';
-import News from './pages/News';
-import SignUp from './pages/SignUp';
-import Account from './pages/Account';
-import PageNotFound from './pages/PageNotFound';
-import LogIn from './pages/LogIn';
+import Home from "./pages/Home";
+import Calculator from "./pages/Calculator";
+import Statistics from "./pages/Statistics";
+import Settings from "./pages/Settings";
+import News from "./pages/News";
+import SignUp from "./pages/SignUp";
+import Account from "./pages/Account";
+import PageNotFound from "./pages/PageNotFound";
+import LogIn from "./pages/LogIn";
 // Router imports
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 // Firebase imports
@@ -27,63 +27,14 @@ const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
 export const UserContext = React.createContext({});
 
 export default function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <NavbarWrapper />,
-      children: [
-        {
-          path: "/home",
-          element: <Home />
-        },
-        {
-          path: "/",
-          element: <Home />
-        },
-        {
-          path: "/sign-up",
-          element: <SignUp />
-        },
-        {
-          path: "/log-in",
-          element: <LogIn />
-        },
-        {
-          path: "/statistics",
-          element: <Statistics />
-        },
-        {
-          path: "/news",
-          element: <News />
-        },
-        {
-          path: "/calculator",
-          element: <Calculator />
-        },
-        {
-          path: "/settings",
-          element: <Settings />
-        },
-        {
-          path: "/account",
-          element: <Account />
-        },
-        {
-          path: "*",
-          element: <PageNotFound />
-        }
-      ]
-    }
-  ], { basename: "/e-co" });
-
-  const [mode, setMode] = React.useState('light');
+  const [mode, setMode] = React.useState("light");
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
-    [],
+    []
   );
 
   const theme = React.useMemo(
@@ -92,14 +43,66 @@ export default function App() {
         palette: {
           mode,
           primary: {
-            main: '#376df4',
+            main: "#376df4",
           },
           secondary: {
-            main: '#f4be37',
+            main: "#f4be37",
           },
         },
       }),
-    [mode],
+    [mode]
+  );
+
+  const router = createBrowserRouter(
+    [
+      {
+        path: "/",
+        element: <NavbarWrapper />,
+        children: [
+          {
+            path: "/home",
+            element: <Home />,
+          },
+          {
+            path: "/",
+            element: <Home />,
+          },
+          {
+            path: "/signup",
+            element: <SignUp />,
+          },
+          {
+            path: "/login",
+            element: <LogIn />,
+          },
+          {
+            path: "/statistics",
+            element: <Statistics />,
+          },
+          {
+            path: "/news",
+            element: <News />,
+          },
+          {
+            path: "/calculator",
+            element: <Calculator />,
+          },
+          {
+            path: "/settings",
+            element: <Settings />,
+          },
+          {
+            path: "/account",
+            element: <Account colorMode={colorMode} theme={theme} />,
+          },
+          {
+            path: "*",
+            element: <PageNotFound />,
+          },
+        ],
+      },
+    ],
+    { basename: "/e-co" }
   );
 
   function NavbarWrapper() {
@@ -128,7 +131,7 @@ export default function App() {
             display: "flex",
             height: "calc(100vh - 64px)",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <Outlet />
@@ -136,8 +139,6 @@ export default function App() {
       </UserContext.Provider>
     );
   }
-
-
 
   return (
     <ColorModeContext.Provider value={colorMode}>

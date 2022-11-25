@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import IconButton from "@mui/material/IconButton";
 import { Tooltip as MuiTooltip } from "@mui/material/Tooltip";
+import Avatar from "@mui/material/Avatar";
 
 import {
   Chart as ChartJS,
@@ -17,7 +18,7 @@ import {
   Title,
   Tooltip,
   Filler,
-  Legend
+  Legend,
 } from "chart.js";
 
 import { Line } from "react-chartjs-2";
@@ -47,31 +48,31 @@ function Statistics() {
     responsive: true,
     plugins: {
       legend: {
-        position: "top"
+        position: "top",
       },
       title: {
         display: true,
         text:
           type === "price"
             ? `Price/MWh for the past ${duration}`
-            : `CO2 emissions for the past ${duration}`
-      }
+            : `CO2 emissions for the past ${duration}`,
+      },
     },
     scales: {
       x: {
         title: {
           display: true,
           text:
-            duration === "day" ? "Hour" : duration === "week" ? "Day" : "Date"
-        }
+            duration === "day" ? "Hour" : duration === "week" ? "Day" : "Date",
+        },
       },
       y: {
         title: {
           display: true,
-          text: type === "price" ? "Euros (€)" : "CO2 eq"
-        }
-      }
-    }
+          text: type === "price" ? "Euros (€)" : "CO2 eq",
+        },
+      },
+    },
   };
 
   const generateLabels = () => {
@@ -99,7 +100,7 @@ function Statistics() {
           "Thursday",
           "Friday",
           "Saturday",
-          "Sunday"
+          "Sunday",
         ];
         const day = time.getDay();
         return days.slice(day).concat(days.slice(0, day));
@@ -127,18 +128,32 @@ function Statistics() {
           )
         ),
         borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)"
-      }
-    ]
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      },
+    ],
   };
 
   return (
     <Container>
       <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} sx={{ textAlign: "center", mb: 5 }}>
-          <InsertChartIcon fontSize="large" />
-          <Typography variant="h4">
-            Statistics{" "}
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <Avatar>
+            <InsertChartIcon />
+          </Avatar>
+        </Grid>
+
+        <Grid item xs={12} display="flex" justifyContent="center">
+          <Typography variant="h4" sx={{ textAlign: "center" }}>
+            Statistics
           </Typography>
         </Grid>
         <Grid item xs={12} md={6} display="flex" justifyContent="space-evenly">

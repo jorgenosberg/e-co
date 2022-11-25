@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import * as React from "react";
 import { faker } from "@faker-js/faker";
-import { Container } from "@mui/material";
+import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -24,56 +25,68 @@ function Home() {
   const a = Number(d);
   const c = randomNumberGenerator2();
   const b = Number(c);
-  const [num] = useState(a);
-  const [num1] = useState(b);
-
+  const [num] = React.useState(a);
+  const [num1] = React.useState(b);
   return (
     <Container>
       <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} sx={{ textAlign: "left", mb: 30 }}>
-          <div
-            style={{
-              fontSize: "10px",
-              padding: "20px",
-              color: "black"
-            }}
-          >
-            <Typography variant="h5">
-              <h1>Welcome to E-Co!</h1>
-              <h2>
-                {" "}
-                The current price of electricity is: {num} €/MWh{" "}
-                <Tooltip
-                  title="This represents the price of electricity at the moment in
+        <Grid item xs={12} sx={{ textAlign: "left" }}>
+          <Typography variant="h1" display="inline" sx={{ fontWeight: "400" }}>
+            Welcome to E
+            <Typography
+              variant="h1"
+              display="inline"
+              color="secondary.main"
+              sx={{ fontWeight: "400" }}
+            >
+              -
+            </Typography>
+            Co
+            <Typography
+              variant="h1"
+              display="inline"
+              color="secondary.main"
+              sx={{ fontWeight: "400" }}
+            >
+              .
+            </Typography>
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sx={{ textAlign: "left" }}>
+          <Typography variant="h4">
+            The current price of electricity is: <Box display="inline" sx={{ px: 1, borderRadius: 2, backgroundColor: "secondary.light" }}>{num}</Box> €/MWh{" "}
+            <Tooltip
+              title="This represents the price of electricity at the moment in
                       Europe for a MWh (average yearly consumption in OECD
                       around 8MWh)"
-                >
-                  <IconButton onClick={handleOpenHelpMenu} sx={{ p: 0 }}>
-                    <HelpOutlineIcon
-                      sx={{ color: "primary" }}
-                      fontSize="large"
-                    />
-                  </IconButton>
-                </Tooltip>
-              </h2>
-              <h2>
-                {" "}
-                The current CO2 emissions is: {num1} g/kWh{" "}
-                <Tooltip
-                  title="This represents how much CO2eq (CO2 equivalent) is
+              placement="right-start"
+            >
+              <IconButton sx={{ p: 0 }}>
+                <HelpOutlineIcon
+                  sx={{ color: "secondary.main" }}
+                  fontSize="large"
+                />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sx={{ textAlign: "left" }}>
+          <Typography variant="h4">
+            The current CO2 emissions is: <Box display="inline" sx={{ px: 1, borderRadius: 2, backgroundColor: "secondary.light" }}>{num1}</Box> g/kWh{" "}
+            <Tooltip
+              title="This represents how much CO2eq (CO2 equivalent) is
                       produced by electrical production in this place
                       (perspective 800g of bread produces roughly 1kg CO2eq)"
-                >
-                  <IconButton onClick={handleOpenHelpMenu} sx={{ p: 0 }}>
-                    <HelpOutlineIcon
-                      sx={{ color: "primary" }}
-                      fontSize="large"
-                    />
-                  </IconButton>
-                </Tooltip>
-              </h2>
-            </Typography>
-          </div>
+              placement="right-start"
+            >
+              <IconButton sx={{ p: 0 }}>
+                <HelpOutlineIcon
+                  sx={{ color: "secondary.main" }}
+                  fontSize="large"
+                />
+              </IconButton>
+            </Tooltip>
+          </Typography>
         </Grid>
       </Grid>
     </Container>

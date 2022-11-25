@@ -14,11 +14,13 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PhoneIcon from "@mui/icons-material/Phone";
 import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
 import SaveIcon from "@mui/icons-material/Save";
 import Snackbar from "@mui/material/Snackbar";
-import ThemeSwitch from "../components/ThemeSwitch";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from '@mui/material/FormControlLabel';
 import PaletteIcon from "@mui/icons-material/Palette";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import MenuItem from "@mui/material/MenuItem";
 import { auth, db } from "../api/firebase";
 import { updateEmail, updatePassword, updateProfile } from "firebase/auth";
@@ -28,10 +30,10 @@ import { UserContext } from "../App";
 const regionMenuOptions = [
   { code: "EU", name: "Europe", currency: "EUR" },
   { code: "US", name: "United States", currency: "USD" },
-  { code: "CA", name: "Canada", currency: "CAD" }
+  { code: "CA", name: "Canada", currency: "CAD" },
 ];
 
-function Account() {
+function Account(props) {
   const user = React.useContext(UserContext);
   const [email, setEmail] = React.useState("");
   const [phone, setPhoneNumber] = React.useState("");
@@ -41,10 +43,9 @@ function Account() {
     code: "FR",
     label: "France",
     phone: "33",
-    suggested: true
+    suggested: true,
   });
   const [region, setRegion] = React.useState("");
-  const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState({});
 
   React.useEffect(() => {
@@ -61,6 +62,7 @@ function Account() {
   const handleRegionChange = (event) => {
     setRegion(event.target.value);
   };
+  const [open, setOpen] = React.useState(false);
 
   const handleSuccess = () => {
     setOpen(true);
@@ -76,6 +78,7 @@ function Account() {
     if (reason === "clickaway") {
       return;
     }
+
     setOpen(false);
   };
 
@@ -102,14 +105,16 @@ function Account() {
     }
   }
 
+
   return (
     <Container
       sx={{
         width: "75%",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
-      }}>
+        alignItems: "center",
+      }}
+    >
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <Container>
@@ -120,15 +125,19 @@ function Account() {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
-                <PaletteIcon fontSize="large" sx={{ color: "primary" }} />
+                <Avatar>
+                  <PaletteIcon />
+                </Avatar>
               </Grid>
-              <Grid item xs={12} sx={{ mb: 2 }}>
+              <Grid item xs={12}>
                 <Typography variant="h5" align="center" fontWeight="bold">
                   Customization
                 </Typography>
+              </Grid>
+              <Grid item xs={12}>
                 <Divider />
               </Grid>
               <Grid item xs={12}>
@@ -137,7 +146,7 @@ function Account() {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <ThemeSwitch />
+                <FormControlLabel control={<Switch defaultChecked={props.theme.palette.mode === "light"} onChange={props.colorMode.toggleColorMode} />} label={props.theme.palette.mode === "dark" ? "Dark mode" : "Default theme"} />
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2">
@@ -180,15 +189,19 @@ function Account() {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
-                <AccountCircleIcon fontSize="large" sx={{ color: "primary" }} />
+                <Avatar>
+                  <ManageAccountsIcon />
+                </Avatar>
               </Grid>
-              <Grid item xs={12} sx={{ mb: 2 }}>
+              <Grid item xs={12}>
                 <Typography variant="h5" align="center" fontWeight="bold">
                   Account Settings
                 </Typography>
+              </Grid>
+              <Grid item xs={12}>
                 <Divider />
               </Grid>
 
@@ -208,7 +221,7 @@ function Account() {
                       <InputAdornment position="start">
                         <AccountBoxIcon />
                       </InputAdornment>
-                    )
+                    ),
                   }}
                 />
               </Grid>
@@ -240,7 +253,7 @@ function Account() {
                       <InputAdornment position="start">
                         <PhoneIcon />
                       </InputAdornment>
-                    )
+                    ),
                   }}
                 />
               </Grid>
@@ -250,7 +263,7 @@ function Account() {
                 sx={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <Button
@@ -267,10 +280,10 @@ function Account() {
                 >
                   <Alert
                     onClose={handleClose}
-                    severity={message.type}
+                    severity="success"
                     sx={{ width: "100%" }}
                   >
-                    {message.text}
+                    Profile updated successfully
                   </Alert>
                 </Snackbar>
               </Grid>

@@ -9,6 +9,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Avatar from "@mui/material/Avatar";
 import InputAdornment from "@mui/material/InputAdornment";
 import Link from "@mui/material/Link";
+import {Link as NavLink} from 'react-router-dom'
 import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
@@ -41,7 +42,7 @@ function LogInForm() {
   return (
     <Container
       sx={{
-        width: "75%",
+        width: "35%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
@@ -58,7 +59,7 @@ function LogInForm() {
             marginBottom: 3
           }}
         >
-          <Avatar fontSize="large" />
+          <Avatar sx={{width: "70px", height: "70px"}} />
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -109,10 +110,7 @@ function LogInForm() {
             alignItems: "center"
           }}
         >
-          <Typography display="inline">Don't have an account?</Typography>
-          <Typography component={Link} to="/sign-up">
-            <Link to="/sign-up">Sign Up</Link>
-          </Typography>
+          <Typography>Don't have an account?{" "}<Link to="/signup" component={NavLink}>Sign Up</Link></Typography>
         </Grid>
       </Grid>
       <Snackbar

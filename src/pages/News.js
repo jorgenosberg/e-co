@@ -8,36 +8,42 @@ import TextField from "@mui/material/TextField";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import Avatar from "@mui/material/Avatar";
 
 const feedSources = [
   { tag: "Energy", source: "https://rss.app/embed/v1/list/fcybDdzmgZe4YUUh" },
   {
     tag: "Electricity",
-    source: "https://rss.app/embed/v1/list/R35m7kcK4ubAhPWS"
+    source: "https://rss.app/embed/v1/list/R35m7kcK4ubAhPWS",
   },
   {
     tag: "Renewable energy",
-    source: "https://rss.app/embed/v1/list/GZo5gt4AwJmXjO9v"
-  }
+    source: "https://rss.app/embed/v1/list/GZo5gt4AwJmXjO9v",
+  },
 ];
 
 function News() {
   const [value, setValue] = React.useState({
     value: {
       tag: "Energy",
-      source: "https://rss.app/embed/v1/list/fcybDdzmgZe4YUUh"
-    }
+      source: "https://rss.app/embed/v1/list/fcybDdzmgZe4YUUh",
+    },
   });
   return (
     <Container>
       <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} md={10} sx={{ textAlign: "center", mt: 1 }}>
-          <NewspaperIcon fontSize="large" />
+        <Grid item xs={12} md={10} sx={{ display:"flex", justifyContent:"center", alignItems:"center", textAlign: "center" }}>
+          <Avatar>
+            <NewspaperIcon />
+          </Avatar>
+        </Grid>
+        <Grid item xs={12} md={10} sx={{ textAlign: "center" }}>
           <Typography variant="h4" align="center">
             Energy News{" "}
-            <Tooltip title="On this page we have compiled a little selection of news about different topics related to energy and sustainability. Please select a topic from the dropdown to access the feed.">
+            <Tooltip title="On this page we have compiled a little selection of news about different topics related to energy and sustainability. Please select a topic from the dropdown to access the feed."
+            placement="right-start">
               <IconButton sx={{ p: 0 }}>
-                <HelpOutlineIcon sx={{ color: "primary" }} fontSize="large" />
+                <HelpOutlineIcon sx={{ color: "secondary.main" }} fontSize="large" />
               </IconButton>
             </Tooltip>
           </Typography>

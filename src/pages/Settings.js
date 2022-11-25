@@ -14,7 +14,8 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import SaveIcon from "@mui/icons-material/Save";
 import Snackbar from "@mui/material/Snackbar";
-import ThemeSwitch from "../components/ThemeSwitch";
+import Avatar from "@mui/material/Avatar";
+import EditNotificationsIcon from '@mui/icons-material/EditNotifications';
 
 function Settings() {
   const [type, setType] = React.useState("price");
@@ -36,6 +37,7 @@ function Settings() {
 
   return (
     <Box>
+        <Avatar><EditNotificationsIcon /></Avatar>
       <Typography variant="h5" fontWeight="bold">
         Notification Settings
       </Typography>

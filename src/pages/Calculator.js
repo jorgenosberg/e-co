@@ -4,13 +4,16 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import CalculatorTool from "../components/CalculatorTool";
 import CalculateIcon from "@mui/icons-material/Calculate";
+import Avatar from "@mui/material/Avatar";
 
 function Calculator() {
   return (
     <Container>
-      <Grid container>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+          <Avatar><CalculateIcon /></Avatar>
+        </Grid>
         <Grid item xs={12} sx={{ textAlign: "center" }}>
-          <CalculateIcon fontSize="large" />
           <Typography variant="h4">Calculator</Typography>
         </Grid>
         <Grid item xs={12}>
