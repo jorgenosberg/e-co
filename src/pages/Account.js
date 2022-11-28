@@ -2,11 +2,8 @@ import * as React from "react";
 import Alert from "@mui/material/Alert";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import CountrySelector from "../components/CountrySelector";
+import CountrySelector, { phoneCountries } from "../components/CountrySelector";
 import PasswordField from "../components/PasswordField";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -27,10 +24,46 @@ import { updateEmail, updatePassword, updateProfile } from "firebase/auth";
 import { onValue, ref, update } from "firebase/database";
 import { UserContext } from "../App";
 
+
 const regionMenuOptions = [
-  { code: "EU", name: "Europe", currency: "EUR" },
-  { code: "US", name: "United States", currency: "USD" },
-  { code: "CA", name: "Canada", currency: "CAD" },
+  { code: "AR", code3: "ARG", label: "Argentina" },
+  { code: "AU", code3: "AUS", label: "Australia" },
+  { code: "AT", code3: "AUT", label: "Austria" },
+  { code: "BE", code3: "BEL", label: "Belgium" },
+  { code: "BG", code3: "BGR", label: "Bulgaria" },
+  { code: "HR", code3: "HRV", label: "Croatia" },
+  { code: "CZ", code3: "CZE", label: "Czech Republic" },
+  { code: "DK", code3: "DNK", label: "Denmark" },
+  { code: "EE", code3: "EST", label: "Estonia" },
+  { code: "FI", code3: "FIN", label: "Finland" },
+  { code: "FR", code3: "FRA", label: "France" },
+  { code: "DE", code3: "DEU", label: "Germany" },
+  { code: "GR", code3: "GRC", label: "Greece" },
+  { code: "HU", code3: "HUN", label: "Hungary" },
+  { code: "IE", code3: "IRL", label: "Ireland" },
+  { code: "IR", code3: "IRN", label: "Islamic Republic of Iran" },
+  { code: "IT", code3: "ITA", label: "Italy" },
+  { code: "JP", code3: "JPN", label: "Japan" },
+  { code: "LV", code3: "LAT", label: "Latvia" },
+  { code: "LT", code3: "LTU", label: "Lithuania" },
+  { code: "LU", code3: "LUX", label: "Luxembourg" },
+  { code: "MX", code3: "MEX", label: "Mexico" },
+  { code: "NL", code3: "NLD", label: "Netherlands" },
+  { code: "NO", code3: "NOR", label: "Norway" },
+  { code: "PH", code3: "PHL", label: "Phillippines" },
+  { code: "PL", code3: "POL", label: "Poland" },
+  { code: "PT", code3: "PRT", label: "Portugal" },
+  { code: "RO", code3: "ROU", label: "Romania" },
+  { code: "RS", code3: "RSB", label: "Serbia" },
+  { code: "SK", code3: "SVK", label: "Slovakia" },
+  { code: "SI", code3: "SVN", label: "Slovenia" },
+  { code: "ES", code3: "ESP", label: "Spain" },
+  { code: "SE", code3: "SWE", label: "Sweden" },
+  { code: "CH", code3: "CHE", label: "Switzerland" },
+  { code: "TR", code3: "TUR", label: "Turkey" },
+  { code: "GB", code3: "GBR", label: "United Kingdom" },
+  { code: "US", code3: "USA", label: "United States" },
+
 ];
 
 function Account(props) {
@@ -150,32 +183,11 @@ function Account(props) {
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="body2">
-                  Preferred region and currency:
+                  Preferred country:
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <Select value={region} onChange={handleRegionChange}>
-                    {regionMenuOptions.map((option) => (
-                      <MenuItem key={option.code} value={option.name}>
-                        <Grid container>
-                          <Box sx={{ mr: 1 }}>
-                            <img
-                              loading="lazy"
-                              width="20"
-                              src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                              srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                              alt="Selected region flag"
-                            />
-                          </Box>
-                          <Typography textAlign="center">
-                            {option.currency}
-                          </Typography>
-                        </Grid>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <CountrySelector value={region} setValue={setRegion} countries={regionMenuOptions} boxLabel="Country" />
               </Grid>
             </Grid>
           </Container>
@@ -235,7 +247,7 @@ function Account(props) {
                 <PasswordField label={"Confirm password"} password={confirmPassword} setPassword={setConfirmPassword} />
               </Grid>
               <Grid item xs={12} md={6}>
-                <CountrySelector value={country} setValue={setCountry} />
+                <CountrySelector value={country} setValue={setCountry} countries={phoneCountries} boxLabel="Country code" />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
