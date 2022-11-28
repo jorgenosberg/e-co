@@ -56,6 +56,12 @@ function CalculatorTool() {
   const calculate = async () => {
     let country = getUserCountry();
     let today = new Date();
+
+    if (today.getHours() < 8) {
+      today.setDate(today.getDate() - 1);
+      today.setHours(23);
+    }
+    
     let todayFormatted = today.toLocaleDateString("en-CA");
     let currentHour = today.getHours();
     let apiUrl = `https://api.iea.org/rte/price/hourly/${country}/timeseries?from=${todayFormatted}&to=${todayFormatted}&currency=local`;
