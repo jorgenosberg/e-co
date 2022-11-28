@@ -131,7 +131,7 @@ export default function App() {
             display: "flex",
             height: "calc(100vh - 64px)",
             justifyContent: "center",
-            alignItems: "center",
+            pt: "64px",
           }}
         >
           <Outlet />
