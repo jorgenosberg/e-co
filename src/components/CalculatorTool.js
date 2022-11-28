@@ -21,6 +21,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
+import { getAuth } from "firebase/auth";
 
 const averageKwhPerHour = {
   "Washing machine": { 30: 1.9, 40: 2.3, 60: 6.3, 90: 8.0 },
@@ -39,8 +40,21 @@ function CalculatorTool() {
   const [durationValue, setDurationValue] = React.useState(1);
   const [calculatedValue, setCalculatedValue] = React.useState(null);
 
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  const getUserCountry = async () => {
+    if (user !== null) {
+      const cca2Code = user.country.code;
+      const countryData = await axios.get(`https://restcountries.com/v3.1/alpha/${cca2Code}?fields=cca3`);
+      return countryData.data.cca3;
+    } else {
+      return "FRA";
+    }
+  }
+
   const calculate = async () => {
-    let country = "FRA";
+    let country = getUserCountry();
     let today = new Date();
     let todayFormatted = today.toLocaleDateString("en-CA");
     let currentHour = today.getHours();
