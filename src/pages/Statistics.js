@@ -4,11 +4,11 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import Typography from "@mui/material/Typography";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import IconButton from "@mui/material/IconButton";
-import { Tooltip as MuiTooltip } from "@mui/material/Tooltip";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import Avatar from "@mui/material/Avatar";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,9 +20,11 @@ import {
   Filler,
   Legend,
 } from "chart.js";
-
 import { Line } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
+
+// APIs
+import { fetchDayPrices, fetchMonthPrices, fetchWeekPrices } from "../api/stats";
 
 ChartJS.register(
   CategoryScale,
@@ -36,13 +38,48 @@ ChartJS.register(
 );
 
 function Statistics() {
-  const [labels, setLabels] = useState([]);
   const [duration, setDuration] = useState("day");
   const [type, setType] = useState("price");
+  const [datapoints, setDatapoints] = useState({});
+  const [country, setCountry] = useState("FRA");
+
+  const handleChange = (event) => {
+    setCountry(event.target.value);
+  };
 
   useEffect(() => {
-    setLabels(generateLabels());
-  }, [duration]);
+    if (type === "price") {
+      (async () => {
+        switch (duration) {
+          case "day":
+            const day = await fetchDayPrices(country);
+            setDatapoints(day);
+            break;
+
+          case "week":
+            const week = await fetchWeekPrices(country);
+            setDatapoints(week);
+            break;
+
+          case "month":
+            const month = await fetchMonthPrices(country);
+            console.log(month)
+            setDatapoints(month);
+            break;
+        }
+      })()
+    } else {
+      const labels = generateLabels()
+      setDatapoints({
+        values: labels.map(() =>
+          faker.datatype.number(
+            type === "price" ? { min: 200, max: 600 } : { min: 10, max: 70 }
+          )
+        ),
+        labels: labels
+      })
+    }
+  }, [duration, country, type])
 
   const options = {
     responsive: true,
@@ -65,12 +102,18 @@ function Statistics() {
           text:
             duration === "day" ? "Hour" : duration === "week" ? "Day" : "Date",
         },
+        grid: {
+          display: false
+        }
       },
       y: {
         title: {
           display: true,
           text: type === "price" ? "Euros (€)" : "CO2 eq",
         },
+        grid: {
+          display: false
+        }
       },
     },
   };
@@ -106,27 +149,23 @@ function Statistics() {
         return days.slice(day).concat(days.slice(0, day));
 
       case "month":
-        return Array.from(Array(31).keys());
+        return Array.from(Array(31).keys()).filter(x => x % 2);
     }
   };
 
   const generateChartLegend = () => {
-    if (type === "price") return duration === "day" ? "€/MWh" : "Peak of €/MWh";
+    if (type === "price") return duration === "day" ? "€/MWh" : "Average of €/MWh";
     if (type === "CO2")
-      return duration === "day" ? "CO2 eq/KWh" : "Peak of CO2 eq/KWh";
+      return duration === "day" ? "CO2 eq/KWh" : "Average of CO2 eq/KWh";
   };
 
   const data = {
-    labels,
+    labels: datapoints.labels,
     datasets: [
       {
         fill: true,
         label: generateChartLegend(),
-        data: labels.map(() =>
-          faker.datatype.number(
-            type === "price" ? { min: 200, max: 600 } : { min: 10, max: 70 }
-          )
-        ),
+        data: datapoints.values,
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
@@ -136,6 +175,33 @@ function Statistics() {
   return (
     <Container>
       <Grid container spacing={2} justifyContent="center">
+        <Grid
+          item
+          xs={12}
+          md={4}
+          lg={3}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <FormControl fullWidth>
+            <InputLabel id="country">Country</InputLabel>
+            <Select
+              labelId="country"
+              value={country}
+              label="Country"
+              onChange={handleChange}
+            >
+              <MenuItem value={"DNK"}>Denmark</MenuItem>
+              <MenuItem value={"FRA"}>France</MenuItem>
+              <MenuItem value={"DEU"}>Germany</MenuItem>
+              <MenuItem value={"NOR"}>Norway</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid
           item
           xs={12}
@@ -176,7 +242,8 @@ function Statistics() {
             sx={{ background: type === "priceCO2" ? "#1976d2" : "#aaa" }}
             onClick={() => setType("priceCO2")}
           >
-            CO<sub>2</sub>/Price
+            CO<sub>2</sub>/
+            Price
           </Button>
         </Grid>
         <Grid item xs={12} md={10}>

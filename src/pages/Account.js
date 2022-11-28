@@ -96,7 +96,7 @@ function Account(props) {
       }
 
       if (email !== user.email)
-        await updateEmail(auth.currentUser, email);
+        await updateEmail(user, email);
       update(ref(db, `users/${user.uid}`), { email: email, country: country, phoneNumber: phone });
       handleSuccess();
     } catch (error) {
