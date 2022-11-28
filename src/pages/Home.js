@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import { ReactComponent as HomeDecoration } from "../assets/home-decoration.svg";
 
 function Home() {
   const [open, setOpen] = React.useState(false);
@@ -89,6 +90,9 @@ function Home() {
           </Typography>
         </Grid>
       </Grid>
+    <Box sx={{position: "fixed", right: 0, bottom: 0}}>
+    <HomeDecoration/>
+    </Box>
     </Container>
   );
 }
