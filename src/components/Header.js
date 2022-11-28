@@ -21,10 +21,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import LightLogo from "../assets/logo.svg";
+import DarkLogo from "../assets/logo-dark.svg";
 
 // REACT ROUTER DOM IMPORTS
 import { Link } from "react-router-dom";
-
 import { logOut } from "../api/auth";
 
 const regionMenuOptions = [
@@ -58,7 +59,7 @@ function Header(props) {
     <AppBar position="static" color="default">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link to="/home">
+          <Link to="/">
             <Box
               component="img"
               sx={{
@@ -67,14 +68,14 @@ function Header(props) {
                 display: "flex"
               }}
               alt="Logo"
-              src={props.theme.palette.mode === "light" ? "images/logo.svg" : "images/logo-dark.svg"}
+              src={props.theme.palette.mode === "light" ? LightLogo : DarkLogo}
             />
           </Link>
           <Box
             sx={{ flexGrow: 1, display: "flex", }}
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            <Button variant="text" component={Link} to="/home" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+            <Button variant="text" component={Link} to="/" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
               HOME
             </Button>
             <Button variant="text" component={Link} to="/calculator" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
@@ -141,7 +142,7 @@ function Header(props) {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "40px", color:"default"}}
+              sx={{ mt: "40px", color: "default" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -161,7 +162,7 @@ function Header(props) {
                 onClick={handleCloseUserMenu}
                 component={Link}
                 to="/account"
-                sx={{"&:hover": { color: "secondary.main" }}}
+                sx={{ "&:hover": { color: "secondary.main" } }}
               >
                 <AccountCircleIcon />
                 <Typography textAlign="center" sx={{ ml: 0.5 }}>
@@ -169,7 +170,7 @@ function Header(props) {
                 </Typography>
               </MenuItem>
 
-              <MenuItem key="Theme" onClick={props.colorMode.toggleColorMode} sx={{"&:hover": { color: "secondary.main" }}}>
+              <MenuItem key="Theme" onClick={props.colorMode.toggleColorMode} sx={{ "&:hover": { color: "secondary.main" } }}>
                 {props.theme.palette.mode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
                 <Typography textAlign="center" sx={{ ml: 0.5 }}>
                   Theme
@@ -181,7 +182,7 @@ function Header(props) {
                 onClick={handleCloseUserMenu}
                 component={Link}
                 to="/login"
-                sx={{"&:hover": { color: "secondary.main" }}}
+                sx={{ "&:hover": { color: "secondary.main" } }}
               >
                 <LogoutIcon />
                 <Typography textAlign="center" sx={{ ml: 0.5 }}>

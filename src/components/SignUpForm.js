@@ -13,7 +13,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import Avatar from "@mui/material/Avatar";
 import InputAdornment from "@mui/material/InputAdornment";
 import Link from "@mui/material/Link";
-import {Link as NavLink} from 'react-router-dom'
+import { Link as NavLink } from 'react-router-dom'
 import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +28,7 @@ function SignUpForm() {
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [message, setMessage] = React.useState({});
   const [open, setOpen] = React.useState(false);
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = React.useState(false);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -55,7 +55,7 @@ function SignUpForm() {
       try {
         await createUser(email, password, country, phoneNumber);
         setMessage({ type: "success", text: "Account created successfully" });
-        setTimeout(() => navigate("/home"), 2000);
+        setTimeout(() => navigate("/"), 2000);
       } catch {
         setMessage({ type: "error", text: "Error creating account" })
       }
@@ -83,7 +83,7 @@ function SignUpForm() {
             marginBottom: 3
           }}
         >
-          <Avatar sx={{width:"70px", height:"70px"}} />
+          <Avatar sx={{ width: "70px", height: "70px" }} />
         </Grid>
         <Grid item xs={12}>
           <TextField

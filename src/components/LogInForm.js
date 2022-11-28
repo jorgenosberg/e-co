@@ -9,7 +9,7 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import Avatar from "@mui/material/Avatar";
 import InputAdornment from "@mui/material/InputAdornment";
 import Link from "@mui/material/Link";
-import {Link as NavLink} from 'react-router-dom'
+import { Link as NavLink } from 'react-router-dom'
 import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ function LogInForm() {
   const logIn = async () => {
     try {
       await signIn(email, password);
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       setOpen(true);
     }
@@ -59,7 +59,7 @@ function LogInForm() {
             marginBottom: 3
           }}
         >
-          <Avatar sx={{width: "70px", height: "70px"}} />
+          <Avatar sx={{ width: "70px", height: "70px" }} />
         </Grid>
         <Grid item xs={12}>
           <TextField

@@ -15,43 +15,110 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import FunctionsIcon from "@mui/icons-material/Functions";
 import Tooltip from "@mui/material/Tooltip";
-
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import IconButton from "@mui/material/IconButton";
+import axios from "axios";
+import { UserContext } from "../App";
+import { db } from "../api/firebase";
+import { onValue, ref } from "firebase/database";
 
-import { faker } from "@faker-js/faker";
+const averageKwhPerHour = {
+  "Washing machine": { 30: 1.9, 40: 2.3, 60: 6.3, 90: 8.0 },
+  Dryer: { Low: 2.5, Medium: 3.25, High: 4.0 },
+  "Electric car": { "Wall charger": 1.32, Normal: 31.88, Fast: 48.52 },
+};
 
 function CalculatorTool() {
   const [task, setTask] = React.useState("");
+  const [optionValue, setOptionValue] = React.useState(null);
   const [showOptions, setShowOptions] = React.useState(false);
-  const [sliderValue, setSliderValue] = React.useState(20);
+  const [heatingSliderValue, setHeatingSliderValue] = React.useState(20);
   const [showerSliderValue, setShowerSliderValue] = React.useState(38);
   const [cookingSliderValue, setCookingSliderValue] = React.useState(180);
   const [type, setType] = React.useState("price");
+  const [durationValue, setDurationValue] = React.useState(1);
   const [calculatedValue, setCalculatedValue] = React.useState(null);
+  const [userCountry, setUserCountry] = React.useState({});
 
-  const calculate = () => {
-    setCalculatedValue(
-      faker.datatype.number({ min: 60, max: 780, precision: 0.01 })
-    );
+  const user = React.useContext(UserContext);
+
+  React.useEffect(() => {
+    onValue(ref(db, `users/${user.uid}`), snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        setUserCountry(data.country);
+      }
+    })
+  }, [])
+
+  const getUserCountry = async () => {
+    if (user !== null) {
+      const cca2Code = userCountry.code;
+      const countryData = await axios.get(`https://restcountries.com/v3.1/alpha/${cca2Code}?fields=cca3`);
+      return countryData.data.cca3;
+    } else {
+      return "FRA";
+    }
+  }
+
+  const calculate = async () => {
+    let country = await getUserCountry();
+    let today = new Date();
+
+    if (today.getHours() < 8) {
+      today.setDate(today.getDate() - 1);
+      today.setHours(23);
+    }
+    
+    let todayFormatted = today.toLocaleDateString("en-CA");
+    let currentHour = today.getHours();
+    let apiUrl = `https://api.iea.org/rte/price/hourly/${country}/timeseries?from=${todayFormatted}&to=${todayFormatted}&currency=local`;
+
+    console.log(apiUrl);
+
+    const apiData = await axios.get(apiUrl);
+    const pricePerMWh = apiData.data[currentHour].Value;
+    const pricePerKWh = pricePerMWh / 1000;
+
+    if (["Washing machine", "Dryer", "Electric car"].includes(task)) {
+      setCalculatedValue(
+        (
+          averageKwhPerHour[task][optionValue] *
+          pricePerKWh *
+          durationValue
+        ).toFixed(2)
+      );
+    } else {
+      if (task === "Shower") {
+        // shower = assume 4.18 kJ per L of water for each degree difference between shower temperature and 10 degrees Celsius
+        // 15L per minute, so 5 minute 38 degree shower = 75L. So 75L * 117 kJ/L * 28 degrees difference = 9MJ = 2.5kWh.
+        let degreeDifference = showerSliderValue - 10;
+        let energyPerLiter = 4.18 * degreeDifference;
+        let litersForShower = 15 * durationValue;
+        let kiloJouleToKiloWattHour = 0.000277778;
+        let kilowattForShower =
+          litersForShower * energyPerLiter * kiloJouleToKiloWattHour;
+        let result = kilowattForShower * pricePerKWh;
+        setCalculatedValue(result.toFixed(2));
+      } else if (task === "Cooking") {
+        // oven = assume range of 1kWh to 3.125kWh. 200 degrees Celsuis equals 2.5 kWh.
+        // simple formula to calculate kWh from temperature: temperature * 0.0125.
+        let result = cookingSliderValue * 0.0125 * durationValue * pricePerKWh;
+        setCalculatedValue(result.toFixed(2));
+      } else if (task === "Heating") {
+        // heating = assume range of 1kWh to 2.5kWh. Target temperature of 20 degrees Celsius equals 1.2 kWh.
+        // kWh from target temperature = target temperature * 0.06
+        let result = heatingSliderValue * 0.06 * durationValue * pricePerKWh;
+        setCalculatedValue(result.toFixed(2));
+      }
+    }
   };
-  const handleTypeChange = (event, newValue) => {
-    setType(newValue);
-  };
-  const handleSliderChange = (event, newValue) => {
-    setSliderValue(newValue);
-  };
-  const handleShowerSliderChange = (event, newValue) => {
-    setShowerSliderValue(newValue);
-  };
-  const handleCookingSliderChange = (event, newValue) => {
-    setCookingSliderValue(newValue);
-  };
+
+  const handleTypeChange = (event, newValue) => setType(newValue);
   const displayOptions = () => setShowOptions(true);
-
   const handleChange = (event) => {
     setTask(event.target.value);
     displayOptions();
@@ -67,6 +134,7 @@ function CalculatorTool() {
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="row-radio-buttons-group"
+              onChange={(event) => setOptionValue(event.target.value)}
             >
               <FormControlLabel value={30} control={<Radio />} label="30℃" />
               <FormControlLabel value={40} control={<Radio />} label="40℃" />
@@ -86,6 +154,7 @@ function CalculatorTool() {
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="row-radio-buttons-group"
+              onChange={(event) => setOptionValue(event.target.value)}
             >
               <FormControlLabel value="Low" control={<Radio />} label="Low" />
               <FormControlLabel
@@ -108,6 +177,7 @@ function CalculatorTool() {
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="row-radio-buttons-group"
+              onChange={(event) => setOptionValue(event.target.value)}
             >
               <FormControlLabel
                 value="Wall"
@@ -131,7 +201,7 @@ function CalculatorTool() {
           <Typography>Avg. shower temperature</Typography>
           <Slider
             value={showerSliderValue}
-            onChange={handleShowerSliderChange}
+            onChange={(event) => setShowerSliderValue(event.target.value)}
             aria-label="Average shower temperature"
             defaultValue={38}
             valueLabelFormat={showerSliderValue + "℃"}
@@ -140,16 +210,16 @@ function CalculatorTool() {
             marks={[
               {
                 value: 35,
-                label: "35°C"
+                label: "35°C",
               },
               {
                 value: 39,
-                label: "39°C"
+                label: "39°C",
               },
               {
                 value: 45,
-                label: "45°C"
-              }
+                label: "45°C",
+              },
             ]}
             min={35}
             max={45}
@@ -162,26 +232,26 @@ function CalculatorTool() {
         <Grid item xs={12}>
           <Typography>Target temperature</Typography>
           <Slider
-            value={sliderValue}
-            onChange={handleSliderChange}
+            value={heatingSliderValue}
+            onChange={(event) => setHeatingSliderValue(event.target.value)}
             aria-label="Target temperature"
             defaultValue={20}
-            valueLabelFormat={sliderValue + "℃"}
+            valueLabelFormat={heatingSliderValue + "℃"}
             valueLabelDisplay="auto"
             step={1}
             marks={[
               {
                 value: 10,
-                label: "10°C"
+                label: "10°C",
               },
               {
                 value: 20,
-                label: "20°C"
+                label: "20°C",
               },
               {
                 value: 30,
-                label: "30°C"
-              }
+                label: "30°C",
+              },
             ]}
             min={10}
             max={30}
@@ -195,7 +265,7 @@ function CalculatorTool() {
           <Typography>Cooking temperature</Typography>
           <Slider
             value={cookingSliderValue}
-            onChange={handleCookingSliderChange}
+            onChange={(event) => setCookingSliderValue(event.target.value)}
             aria-label="Cooking temperature"
             defaultValue={180}
             valueLabelFormat={cookingSliderValue + "℃"}
@@ -204,20 +274,20 @@ function CalculatorTool() {
             marks={[
               {
                 value: 80,
-                label: "80°C"
+                label: "80°C",
               },
               {
                 value: 180,
-                label: "180°C"
+                label: "180°C",
               },
               {
                 value: 220,
-                label: "220°C"
+                label: "220°C",
               },
               {
                 value: 250,
-                label: "250°C"
-              }
+                label: "250°C",
+              },
             ]}
             min={80}
             max={250}
@@ -233,16 +303,22 @@ function CalculatorTool() {
         width: "75%",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
       }}
     >
       <Grid container spacing={2} justifyContent="center" alignItems="center">
         <Grid item xs={12}>
           <Typography>
             Task
-            <Tooltip title="Choose which task you are doing in order to help us find your answer" placement="right">
+            <Tooltip
+              title="Choose which task you are doing in order to help us find your answer"
+              placement="right"
+            >
               <IconButton sx={{ p: 0, ml: 0.5, mb: 0.5 }}>
-                <HelpOutlineIcon sx={{ color: "secondary.main" }} fontSize="medium" />
+                <HelpOutlineIcon
+                  sx={{ color: "secondary.main" }}
+                  fontSize="medium"
+                />
               </IconButton>
             </Tooltip>
           </Typography>
@@ -274,13 +350,28 @@ function CalculatorTool() {
         </Grid>
         {showOptions ? generateOptions(task) : null}
         <Grid item xs={12}>
-          <DurationSlider />
+          {task === "Shower" ? (
+            <DurationSlider
+              setDurationValue={setDurationValue}
+              durationValue={durationValue}
+              timeUnit={"minutes"}
+            />
+          ) : (
+            <DurationSlider
+              setDurationValue={setDurationValue}
+              durationValue={durationValue}
+              timeUnit={"hours"}
+            />
+          )}
         </Grid>
         <Grid item xs={12}>
           <FormControl>
             <Typography>
               Type
-              <Tooltip title="Select what you want to calculate" placement="right">
+              <Tooltip
+                title="Select what you want to calculate"
+                placement="right"
+              >
                 <IconButton sx={{ p: 0, ml: 0.5, mb: 0.5 }}>
                   <HelpOutlineIcon
                     sx={{ color: "secondary.main" }}
@@ -304,6 +395,7 @@ function CalculatorTool() {
                 label="Price"
               />
               <FormControlLabel
+                disabled
                 value="co2"
                 control={<Radio />}
                 label="CO2 emissions"
@@ -327,14 +419,14 @@ function CalculatorTool() {
               endAdornment: (
                 <InputAdornment position="end">
                   {type === "price" ? (
-                    <Typography>€/kWh</Typography>
+                    <Typography>€</Typography>
                   ) : (
                     <Typography>
-                      CO<sub>2</sub> eq/kWh
+                      CO<sub>2</sub> eq
                     </Typography>
                   )}
                 </InputAdornment>
-              )
+              ),
             }}
           />
         </Grid>
