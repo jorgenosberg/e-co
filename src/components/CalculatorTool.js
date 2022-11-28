@@ -21,7 +21,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
-import { getAuth } from "firebase/auth";
+import { UserContext } from "../App";
+import { db } from "../api/firebase";
+import { onValue, ref } from "firebase/database";
 
 const averageKwhPerHour = {
   "Washing machine": { 30: 1.9, 40: 2.3, 60: 6.3, 90: 8.0 },
@@ -39,13 +41,22 @@ function CalculatorTool() {
   const [type, setType] = React.useState("price");
   const [durationValue, setDurationValue] = React.useState(1);
   const [calculatedValue, setCalculatedValue] = React.useState(null);
+  const [userCountry, setUserCountry] = React.useState({});
 
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const user = React.useContext(UserContext);
+
+  React.useEffect(() => {
+    onValue(ref(db, `users/${user.uid}`), snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        setUserCountry(data.country);
+      }
+    })
+  }, [])
 
   const getUserCountry = async () => {
     if (user !== null) {
-      const cca2Code = user.country.code;
+      const cca2Code = userCountry.code;
       const countryData = await axios.get(`https://restcountries.com/v3.1/alpha/${cca2Code}?fields=cca3`);
       return countryData.data.cca3;
     } else {
@@ -54,7 +65,7 @@ function CalculatorTool() {
   }
 
   const calculate = async () => {
-    let country = getUserCountry();
+    let country = await getUserCountry();
     let today = new Date();
 
     if (today.getHours() < 8) {
@@ -65,6 +76,8 @@ function CalculatorTool() {
     let todayFormatted = today.toLocaleDateString("en-CA");
     let currentHour = today.getHours();
     let apiUrl = `https://api.iea.org/rte/price/hourly/${country}/timeseries?from=${todayFormatted}&to=${todayFormatted}&currency=local`;
+
+    console.log(apiUrl);
 
     const apiData = await axios.get(apiUrl);
     const pricePerMWh = apiData.data[currentHour].Value;
