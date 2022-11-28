@@ -24,7 +24,6 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 // REACT ROUTER DOM IMPORTS
 import { Link } from "react-router-dom";
-
 import { logOut } from "../api/auth";
 
 const regionMenuOptions = [
