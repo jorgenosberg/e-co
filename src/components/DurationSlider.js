@@ -6,23 +6,22 @@ import Slider from "@mui/material/Slider";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import TextField from "@mui/material/TextField";
 
-function valuetext(value) {
-  return value <= 1 ? `${value} hour` : `${value} hours`;
-}
-
-function valueLabelFormat(value) {
-  return value <= 1 ? `${value} hour` : `${value} hours`;
-}
-
-function DurationSlider() {
-  const [value, setValue] = React.useState(1);
+function DurationSlider(props) {
+  
+  function valueLabelFormat(value) {
+    if (props.timeUnit === "hours") {
+      return value <= 1 ? `${value} hour` : `${value} hours`;
+    } else {
+      return value <= 1 ? `${value} minute` : `${value} minutes`;
+    }
+  }
 
   const handleSliderChange = (event, newValue) => {
-    setValue(newValue);
+    props.setDurationValue(newValue);
   };
 
   const handleInputChange = (event) => {
-    setValue(event.target.value === "" ? "" : Number(event.target.value));
+    props.setDurationValue(event.target.value === "" ? "" : Number(event.target.value));
   };
 
   return (
@@ -34,17 +33,16 @@ function DurationSlider() {
         <Grid item xs={1}>
           <AccessTimeFilledIcon sx={{ color: "primary" }} />
         </Grid>
-        <Grid item xs={7.5} sx={{ mr: 1 }}>
+        <Grid item xs={9} sx={{pr: 1}}>
           <Slider
-            value={typeof value === "number" ? value : 0}
+            value={typeof props.durationValue === "number" ? props.durationValue : 0}
             onChange={handleSliderChange}
-            aria-label="Duration"
             defaultValue={1}
             valueLabelFormat={valueLabelFormat}
-            getAriaValueText={valuetext}
             valueLabelDisplay="auto"
-            step={0.5}
-            marks={[
+            step={props.timeUnit === "hours" ? 0.5 : 1}
+            marks={props.timeUnit === "hours" ?
+              [
               {
                 value: 0,
                 label: "0h"
@@ -57,23 +55,43 @@ function DurationSlider() {
                 value: 24,
                 label: "24hrs"
               }
-            ]}
+            ] :
+            [
+              {
+                value: 0,
+                label: "0min"
+              },
+              {
+                value: 30,
+                label: "30min"
+              },
+              {
+                value: 60,
+                label: "60min"
+              }
+            ]
+          }
             min={0}
-            max={24}
+            max={props.timeUnit === "hours" ? 24 : 60}
           />
         </Grid>
-        <Grid item xs={3.25}>
+        <Grid item xs={2}>
           <TextField
+            fullWidth
             variant="outlined"
-            value={value}
+            value={props.durationValue}
             size="small"
             onChange={handleInputChange}
-            inputProps={{
+            inputProps={props.timeUnit === "hours" ? {
               step: 0.5,
               min: 0,
               max: 24,
               type: "number",
-              "aria-labelledby": "input-slider"
+            } : {
+              step: 1,
+              min: 0,
+              max: 60,
+              type: "number",
             }}
           />
         </Grid>
