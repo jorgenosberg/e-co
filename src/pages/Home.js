@@ -9,8 +9,10 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { fetchDayPrices } from "../api/stats";
 import { ReactComponent as HomeDecoration } from "../assets/home-decoration.svg";
 import { faker } from "@faker-js/faker";
+import { UserContext } from "../App";
 
 function Home() {
+  const user = React.useContext(UserContext);
   const [price, setPrice] = React.useState(0);
   const [emissions] = React.useState(Number(randomNumberGenerator()));
 
@@ -30,24 +32,24 @@ function Home() {
     <Container>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} sx={{ textAlign: "left" }}>
-          <Typography variant="h1" display="inline" sx={{ fontWeight: "400" }}>
-            Welcome to E
+          <Typography variant="h2" display="inline" sx={{ fontWeight: "400" }}>
+            Welcome,{" "}
             <Typography
-              variant="h1"
+              variant="h2"
               display="inline"
               color="secondary.main"
               sx={{ fontWeight: "400" }}
             >
-              -
+              #
             </Typography>
-            Co
+            {user.email.split('@')[0]}
             <Typography
-              variant="h1"
+              variant="h2"
               display="inline"
               color="secondary.main"
               sx={{ fontWeight: "400" }}
             >
-              .
+              !
             </Typography>
           </Typography>
         </Grid>
