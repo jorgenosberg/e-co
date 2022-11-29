@@ -23,18 +23,20 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import LightLogo from "../assets/logo.svg";
 import DarkLogo from "../assets/logo-dark.svg";
+import { regionMenuOptions } from "./CountrySelector";
 
 // REACT ROUTER DOM IMPORTS
 import { Link } from "react-router-dom";
 import { logOut } from "../api/auth";
 
-const regionMenuOptions = [
-  { code: "EU", name: "Europe", currency: "EUR" },
-  { code: "US", name: "United States", currency: "USD" },
-  { code: "CA", name: "Canada", currency: "CAD" }
-];
+// FIREBASE IMPORTS
+import { db } from "../api/firebase";
+import { ref, set } from "firebase/database";
+import { UserContext } from "../App";
+
 
 function Header(props) {
+  const user = React.useContext(UserContext);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElRegion, setAnchorElRegion] = React.useState(null);
 
@@ -54,6 +56,10 @@ function Header(props) {
   const handleCloseRegionMenu = () => {
     setAnchorElRegion(null);
   };
+
+  const updateRegion = (region) => {
+    set(ref(db, `users/${user.uid}/statsRegion`), region);
+  }
 
   return (
     <AppBar position="static" color="default" >
@@ -91,9 +97,15 @@ function Header(props) {
             </Button>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Region & Currency">
+            <Tooltip title="Preferred Region">
               <IconButton onClick={handleOpenRegionMenu} sx={{ "&:hover": { color: "secondary.main" } }}>
-                <FlagIcon />
+                <img
+                  loading="lazy"
+                  width="30"
+                  src={`https://flagcdn.com/w20/${props.userRegion.code.toLowerCase()}.png`}
+                  srcSet={`https://flagcdn.com/w40/${props.userRegion.code.toLowerCase()}.png 2x`}
+                  alt="Selected region flag"
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -102,21 +114,20 @@ function Header(props) {
               anchorEl={anchorElRegion}
               anchorOrigin={{
                 vertical: "top",
-                horizontal: "right"
+                horizontal: "left"
               }}
               keepMounted
               transformOrigin={{
                 vertical: "top",
-                horizontal: "right"
+                horizontal: "left"
               }}
               open={Boolean(anchorElRegion)}
               onClose={handleCloseRegionMenu}
             >
               {regionMenuOptions.map((option) => (
                 <MenuItem
-                  disabled
                   key={option.code}
-                  onClick={handleCloseUserMenu}
+                  onClick={() => updateRegion(option)}
                 >
                   <Box sx={{ mr: 1 }}>
                     <img
@@ -127,7 +138,7 @@ function Header(props) {
                       alt="Selected region flag"
                     />
                   </Box>
-                  <Typography textAlign="center">{option.currency}</Typography>
+                  <Typography textAlign="center">{option.label}</Typography>
                 </MenuItem>
               ))}
             </Menu>

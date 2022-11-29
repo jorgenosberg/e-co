@@ -20,35 +20,23 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import { db } from "../api/firebase";
 import { updateEmail, updatePassword, } from "firebase/auth";
-import { onValue, ref, update } from "firebase/database";
+import { ref, update } from "firebase/database";
 import { UserContext } from "../App";
 
 function Account(props) {
   const user = React.useContext(UserContext);
-  const [email, setEmail] = React.useState("");
-  const [phone, setPhoneNumber] = React.useState("");
+  const [email, setEmail] = React.useState(props.user.email);
+  const [phone, setPhoneNumber] = React.useState(props.user.phoneNumber);
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [country, setCountry] = React.useState({
+  const [country, setCountry] = React.useState(props.user.country || {
     code: "FR",
     label: "France",
     phone: "33",
     suggested: true,
   });
-  const [region, setRegion] = React.useState({ code: "FR", code3: "FRA", label: "France" },);
+  const [region, setRegion] = React.useState(props.user.statsRegion || { code: "FR", code3: "FRA", label: "France" });
   const [message, setMessage] = React.useState({});
-
-  React.useEffect(() => {
-    onValue(ref(db, `users/${user.uid}`), snapshot => {
-      const data = snapshot.val();
-      if (data) {
-        setEmail(data.email);
-        setPhoneNumber(data.phoneNumber);
-        setCountry(data.country);
-      }
-    })
-  }, [])
-
 
   const [open, setOpen] = React.useState(false);
 
@@ -85,7 +73,7 @@ function Account(props) {
 
       if (email !== user.email)
         await updateEmail(user, email);
-      update(ref(db, `users/${user.uid}`), { email: email, country: country, phoneNumber: phone });
+      update(ref(db, `users/${user.uid}`), { email: email, country: country, phoneNumber: phone, statsRegion: region });
       handleSuccess();
     } catch (error) {
       console.error(error)
@@ -192,15 +180,6 @@ function Account(props) {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Typography variant="body2">Change password</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <PasswordField label={"Password"} password={password} setPassword={setPassword} />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <PasswordField label={"Confirm password"} password={confirmPassword} setPassword={setConfirmPassword} />
-              </Grid>
               <Grid item xs={12} md={6}>
                 <CountrySelector value={country} setValue={setCountry} countries={phoneCountries} boxLabel="Country code" />
               </Grid>
@@ -223,6 +202,15 @@ function Account(props) {
                     ),
                   }}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2">Change password</Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <PasswordField label={"Password"} password={password} setPassword={setPassword} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <PasswordField label={"Confirm password"} password={confirmPassword} setPassword={setConfirmPassword} />
               </Grid>
               <Grid
                 item
@@ -247,10 +235,10 @@ function Account(props) {
                 >
                   <Alert
                     onClose={handleClose}
-                    severity="success"
+                    severity={message.type}
                     sx={{ width: "100%" }}
                   >
-                    {message}
+                    {message.text}
                   </Alert>
                 </Snackbar>
               </Grid>

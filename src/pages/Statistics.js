@@ -5,6 +5,8 @@ import Container from "@mui/material/Container";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
+import Paper from "@mui/material/Paper";
+import { db } from "../api/firebase";
 import CountrySelector, { regionMenuOptions } from "../components/CountrySelector";
 import {
   Chart as ChartJS,
@@ -22,8 +24,7 @@ import { faker } from "@faker-js/faker";
 
 // APIs
 import { fetchDayPrices, fetchMonthPrices, fetchWeekPrices } from "../api/stats";
-import Paper from "@mui/material/Paper";
-import { alpha } from "@mui/material";
+
 
 
 ChartJS.register(
@@ -37,28 +38,29 @@ ChartJS.register(
   Legend
 );
 
-function Statistics({ theme }) {
+function Statistics({ theme, userRegion }) {
   const [duration, setDuration] = useState("day");
   const [type, setType] = useState("price");
   const [datapoints, setDatapoints] = useState({});
-  const [country, setCountry] = useState({ code: "FR", code3: "FRA", label: "France" });
+  const [region, setRegion] = useState(userRegion || { code: "FR", code3: "FRA", label: "France" });
+
 
   useEffect(() => {
     if (type === "price") {
       (async () => {
         switch (duration) {
           case "day":
-            const day = await fetchDayPrices(country.code3);
+            const day = await fetchDayPrices(region.code3);
             setDatapoints(day);
             break;
 
           case "week":
-            const week = await fetchWeekPrices(country.code3);
+            const week = await fetchWeekPrices(region.code3);
             setDatapoints(week);
             break;
 
           case "month":
-            const month = await fetchMonthPrices(country.code3);
+            const month = await fetchMonthPrices(region.code3);
             console.log(month)
             setDatapoints(month);
             break;
@@ -75,7 +77,7 @@ function Statistics({ theme }) {
         labels: labels
       })
     }
-  }, [duration, country, type])
+  }, [duration, region, type])
 
   const options = {
     responsive: true,
@@ -202,7 +204,7 @@ function Statistics({ theme }) {
               textAlign: "center",
             }}
           >
-            <CountrySelector value={country} setValue={setCountry} countries={regionMenuOptions} boxLabel="Country" />
+            <CountrySelector value={region} setValue={setRegion} countries={regionMenuOptions} boxLabel="Country" />
           </Grid>
           <Grid item xs={12} md={6} display="flex" justifyContent="space-evenly">
             <Button

@@ -20,7 +20,8 @@ import LogIn from "./pages/LogIn";
 // Router imports
 import { Route, Routes, Navigate, Outlet, BrowserRouter } from 'react-router-dom';
 // Firebase imports
-import { auth } from './api/firebase';
+import { auth, db } from './api/firebase';
+import { onValue, ref } from "firebase/database";
 import { onAuthStateChanged } from 'firebase/auth';
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => { } });
@@ -30,10 +31,11 @@ export const UserContext = React.createContext({});
 export default function App() {
   const [mode, setMode] = React.useState("light");
   const [user, setUser] = React.useState(null);
+  const [userData, setUserData] = React.useState({});
 
   function PrivateOutlet() {
     return user ? <>
-      <Header colorMode={colorMode} theme={theme} />
+      <Header colorMode={colorMode} theme={theme} userRegion={userData.statsRegion || {}} />
       <Container
         maxWidth="100%"
         sx={{
@@ -49,7 +51,7 @@ export default function App() {
   }
 
   React.useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
       } else {
@@ -57,10 +59,21 @@ export default function App() {
       }
     });
 
-    // return () => {
-    //   unsubscribe();
-    // };
-  }, [auth.currentUser])
+    return () => {
+      unsubscribe();
+    };
+  }, [])
+
+  React.useEffect(() => {
+    if (user)
+      onValue(ref(db, `users/${user.uid}`), snapshot => {
+        const data = snapshot.val();
+        if (data) {
+          setUserData(data);
+        }
+      })
+  }, [user])
+
 
   const colorMode = React.useMemo(
     () => ({
@@ -94,14 +107,14 @@ export default function App() {
         <UserContext.Provider value={user}>
           <BrowserRouter basename="/e-co">
             <Routes>
-              <Route path="/signup" element={<SignUp colorMode={colorMode} theme={theme}/>} />
-              <Route path="login" element={<LogIn colorMode={colorMode} theme={theme}/>} />
+              <Route path="/signup" element={<SignUp colorMode={colorMode} theme={theme} />} />
+              <Route path="login" element={<LogIn colorMode={colorMode} theme={theme} />} />
               <Route path="/" element={<PrivateOutlet />}>
                 <Route path="/" element={<Home />} />
-                <Route path="/statistics" element={<Statistics theme={theme} />} />
+                <Route path="/statistics" element={<Statistics theme={theme} userRegion={userData.statsRegion} />} />
                 <Route path="/calculator" element={<Calculator />} />
                 <Route path="/news" element={<News />} />
-                <Route path="/account" element={<Account colorMode={colorMode} theme={theme} />} />
+                <Route path="/account" element={<Account colorMode={colorMode} theme={theme} user={userData} />} />
                 <Route path="/settings" element={<Settings />} />
               </Route>
               <Route path="*" element={<PageNotFound />} />

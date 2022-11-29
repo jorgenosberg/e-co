@@ -3,7 +3,7 @@ import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import CountrySelector, {phoneCountries} from "./CountrySelector";
+import CountrySelector, { phoneCountries } from "./CountrySelector";
 import PasswordField from "./PasswordField";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -34,9 +34,9 @@ function SignUpForm() {
     setChecked(event.target.checked);
   };
 
-  const handleError = () => {
+  const handleError = (error) => {
     setOpen(true);
-    setMessage({ type: "error", text: "Passwords do not match" })
+    setMessage({ type: "error", text: error })
   };
 
   const handleClose = (event, reason) => {
@@ -50,14 +50,15 @@ function SignUpForm() {
 
   const signUp = async () => {
     if (password !== confirmPassword) {
-      handleError();
+      handleError("Passwords do not match");
     } else {
       try {
         await createUser(email, password, country, phoneNumber);
+        setOpen(true);
         setMessage({ type: "success", text: "Account created successfully" });
         setTimeout(() => navigate("/"), 2000);
-      } catch {
-        setMessage({ type: "error", text: "Error creating account" })
+      } catch (e) {
+        handleError(e.message.replace(/Firebase:/, ""))
       }
 
     }

@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { ref, set } from "firebase/database";
+import { regionMenuOptions } from "../../components/CountrySelector";
 import { auth, db } from '../firebase'
 
 export const createUser = async (email, password, country, phoneNumber) => {
@@ -8,11 +9,13 @@ export const createUser = async (email, password, country, phoneNumber) => {
         set(ref(db, `users/${userCredential.user.uid}`), {
             email: email,
             country: country,
+            statsRegion: regionMenuOptions.find(region => country.code === region.code) || { code: "FR", code3: "FRA", label: "France" },
             phoneNumber: phoneNumber
         });
         return 200;
     } catch (error) {
-        return Promise.reject(error.code);
+        console.error(error.message)
+        return Promise.reject(error);
     }
 }
 
