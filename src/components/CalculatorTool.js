@@ -47,7 +47,7 @@ function CalculatorTool() {
   const [cookingSliderValue, setCookingSliderValue] = React.useState(180);
   const [type, setType] = React.useState("price");
   const [durationValue, setDurationValue] = React.useState(1);
-  const [calculatedValue, setCalculatedValue] = React.useState(null);
+  const [calculatedValue, setCalculatedValue] = React.useState("");
   const [userCountry, setUserCountry] = React.useState({});
 
   const user = React.useContext(UserContext);
@@ -454,10 +454,10 @@ function CalculatorTool() {
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={12}
           sx={{
             display: "flex",
-            justifyContent: "space-around",
+            justifyContent: "center",
             alignItems: "space-around",
           }}
         >
@@ -465,6 +465,7 @@ function CalculatorTool() {
             variant="contained"
             onClick={resetCalculator}
             endIcon={<DeleteOutlinedIcon />}
+            sx={{mx:1}}
           >
             RESET
           </Button>
@@ -472,16 +473,16 @@ function CalculatorTool() {
             variant="contained"
             onClick={calculate}
             endIcon={<StartIcon />}
+            sx={{mx:1}}
           >
             CALCULATE
           </Button>
-        </Grid>
-        <Grid item xs={6}>
           <TextField
             focused={calculatedValue === "" ? false : true}
             id="outlined-read-only-input"
             label="Result"
             value={calculatedValue}
+            sx={{mx:1}}
             InputProps={{
               readOnly: true,
               endAdornment: (
