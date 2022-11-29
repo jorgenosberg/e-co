@@ -18,7 +18,7 @@ import Account from "./pages/Account";
 import PageNotFound from "./pages/PageNotFound";
 import LogIn from "./pages/LogIn";
 // Router imports
-import { createBrowserRouter, Route, Routes, Navigate, Outlet, BrowserRouter } from 'react-router-dom';
+import { Route, Routes, Navigate, Outlet, BrowserRouter } from 'react-router-dom';
 // Firebase imports
 import { auth } from './api/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -94,8 +94,8 @@ export default function App() {
         <UserContext.Provider value={user}>
           <BrowserRouter basename="/e-co">
             <Routes>
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="login" element={<LogIn />} />
+              <Route path="/signup" element={<SignUp colorMode={colorMode} theme={theme}/>} />
+              <Route path="login" element={<LogIn colorMode={colorMode} theme={theme}/>} />
               <Route path="/" element={<PrivateOutlet />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/statistics" element={<Statistics />} />

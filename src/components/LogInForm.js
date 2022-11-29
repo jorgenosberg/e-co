@@ -42,7 +42,7 @@ function LogInForm() {
   return (
     <Container
       sx={{
-        width: "35%",
+        width: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
