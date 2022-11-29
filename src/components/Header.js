@@ -56,7 +56,7 @@ function Header(props) {
   };
 
   return (
-    <AppBar position="static" color="default">
+    <AppBar position="static" color="default" >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to="/">
@@ -75,18 +75,18 @@ function Header(props) {
             sx={{ flexGrow: 1, display: "flex", }}
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            <Button variant="text" component={Link} to="/" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+            <Button variant="text" component={Link} to="/" sx={{ fontWeight: "bold", color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
               HOME
             </Button>
-            <Button variant="text" component={Link} to="/calculator" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+            <Button variant="text" component={Link} to="/calculator" sx={{ fontWeight: "bold", color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
               CALCULATOR
             </Button>
 
-            <Button variant="text" component={Link} to="/statistics" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+            <Button variant="text" component={Link} to="/statistics" sx={{ fontWeight: "bold", color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
               STATISTICS
             </Button>
 
-            <Button variant="text" component={Link} to="/news" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
+            <Button variant="text" component={Link} to="/news" sx={{ fontWeight: "bold", color: "text.secondary", "&:hover": { color: "secondary.main" } }}>
               NEWS
             </Button>
           </Box>

@@ -44,7 +44,6 @@ function CountrySelector({ value, setValue, countries, boxLabel }) {
       )}
       renderInput={(params) => (
         <TextField
-          required
           {...params}
           label={boxLabel}
           InputProps={{
@@ -69,6 +68,46 @@ function CountrySelector({ value, setValue, countries, boxLabel }) {
 }
 
 export default CountrySelector;
+
+export const regionMenuOptions = [
+  { code: "AR", code3: "ARG", label: "Argentina" },
+  { code: "AU", code3: "AUS", label: "Australia" },
+  { code: "AT", code3: "AUT", label: "Austria" },
+  { code: "BE", code3: "BEL", label: "Belgium" },
+  { code: "BG", code3: "BGR", label: "Bulgaria" },
+  { code: "HR", code3: "HRV", label: "Croatia" },
+  { code: "CZ", code3: "CZE", label: "Czech Republic" },
+  { code: "DK", code3: "DNK", label: "Denmark" },
+  { code: "EE", code3: "EST", label: "Estonia" },
+  { code: "FI", code3: "FIN", label: "Finland" },
+  { code: "FR", code3: "FRA", label: "France" },
+  { code: "DE", code3: "DEU", label: "Germany" },
+  { code: "GR", code3: "GRC", label: "Greece" },
+  { code: "HU", code3: "HUN", label: "Hungary" },
+  { code: "IE", code3: "IRL", label: "Ireland" },
+  { code: "IR", code3: "IRN", label: "Islamic Republic of Iran" },
+  { code: "IT", code3: "ITA", label: "Italy" },
+  { code: "JP", code3: "JPN", label: "Japan" },
+  { code: "LV", code3: "LAT", label: "Latvia" },
+  { code: "LT", code3: "LTU", label: "Lithuania" },
+  { code: "LU", code3: "LUX", label: "Luxembourg" },
+  { code: "MX", code3: "MEX", label: "Mexico" },
+  { code: "NL", code3: "NLD", label: "Netherlands" },
+  { code: "NO", code3: "NOR", label: "Norway" },
+  { code: "PH", code3: "PHL", label: "Phillippines" },
+  { code: "PL", code3: "POL", label: "Poland" },
+  { code: "PT", code3: "PRT", label: "Portugal" },
+  { code: "RO", code3: "ROU", label: "Romania" },
+  { code: "RS", code3: "RSB", label: "Serbia" },
+  { code: "SK", code3: "SVK", label: "Slovakia" },
+  { code: "SI", code3: "SVN", label: "Slovenia" },
+  { code: "ES", code3: "ESP", label: "Spain" },
+  { code: "SE", code3: "SWE", label: "Sweden" },
+  { code: "CH", code3: "CHE", label: "Switzerland" },
+  { code: "TR", code3: "TUR", label: "Turkey" },
+  { code: "GB", code3: "GBR", label: "United Kingdom" },
+  { code: "US", code3: "USA", label: "United States" },
+];
 
 // From https://bitbucket.org/atlassian/atlaskit-mk-2/raw/4ad0e56649c3e6c973e226b7efaeb28cb240ccb0/packages/core/select/src/data/countries.js
 export const phoneCountries = [

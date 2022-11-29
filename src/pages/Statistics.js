@@ -4,11 +4,8 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import InsertChartIcon from "@mui/icons-material/InsertChart";
 import Typography from "@mui/material/Typography";
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import Avatar from "@mui/material/Avatar";
+import CountrySelector, { regionMenuOptions } from "../components/CountrySelector";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,6 +23,7 @@ import { faker } from "@faker-js/faker";
 // APIs
 import { fetchDayPrices, fetchMonthPrices, fetchWeekPrices } from "../api/stats";
 import Paper from "@mui/material/Paper";
+import { alpha } from "@mui/material";
 
 
 ChartJS.register(
@@ -39,32 +37,28 @@ ChartJS.register(
   Legend
 );
 
-function Statistics() {
+function Statistics({ theme }) {
   const [duration, setDuration] = useState("day");
   const [type, setType] = useState("price");
   const [datapoints, setDatapoints] = useState({});
-  const [country, setCountry] = useState("FRA");
-
-  const handleChange = (event) => {
-    setCountry(event.target.value);
-  };
+  const [country, setCountry] = useState({ code: "FR", code3: "FRA", label: "France" });
 
   useEffect(() => {
     if (type === "price") {
       (async () => {
         switch (duration) {
           case "day":
-            const day = await fetchDayPrices(country);
+            const day = await fetchDayPrices(country.code3);
             setDatapoints(day);
             break;
 
           case "week":
-            const week = await fetchWeekPrices(country);
+            const week = await fetchWeekPrices(country.code3);
             setDatapoints(week);
             break;
 
           case "month":
-            const month = await fetchMonthPrices(country);
+            const month = await fetchMonthPrices(country.code3);
             console.log(month)
             setDatapoints(month);
             break;
@@ -175,116 +169,101 @@ function Statistics() {
   };
 
   return (
-    <Paper elevation={10} sx={{borderRadius: 10}}>
     <Container>
-      <Grid container spacing={2} justifyContent="center">
-        <Grid
-          item
-          xs={12}
-          md={4}
-          lg={3}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          <FormControl fullWidth>
-            <InputLabel id="country">Country</InputLabel>
-            <Select
-              labelId="country"
-              value={country}
-              label="Country"
-              onChange={handleChange}
+      <Paper elevation={10} sx={{ p: 5, borderRadius: 10 }}>
+        <Grid container spacing={2} justifyContent="center">
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <Avatar>
+              <InsertChartIcon />
+            </Avatar>
+          </Grid>
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <Typography variant="h4" sx={{ textAlign: "center" }}>
+              Statistics
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            lg={3}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <CountrySelector value={country} setValue={setCountry} countries={regionMenuOptions} boxLabel="Country" />
+          </Grid>
+          <Grid item xs={12} md={6} display="flex" justifyContent="space-evenly">
+            <Button
+              variant="contained"
+              sx={{ background: type === "price" ? theme.palette.primary.main : "#aaa" }}
+              onClick={() => setType("price")}
             >
-              <MenuItem value={"DNK"}>Denmark</MenuItem>
-              <MenuItem value={"FRA"}>France</MenuItem>
-              <MenuItem value={"DEU"}>Germany</MenuItem>
-              <MenuItem value={"NOR"}>Norway</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          <Avatar>
-            <InsertChartIcon />
-          </Avatar>
-        </Grid>
-
-        <Grid item xs={12} display="flex" justifyContent="center">
-          <Typography variant="h4" sx={{ textAlign: "center" }}>
-            Statistics
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={6} display="flex" justifyContent="space-evenly">
-          <Button
-            variant="contained"
-            sx={{ background: type === "price" ? "#1976d2" : "#aaa" }}
-            onClick={() => setType("price")}
+              Price/MWh
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ background: type === "CO2" ? theme.palette.primary.main : "#aaa" }}
+              onClick={() => setType("CO2")}
+            >
+              CO<sub>2</sub>/KWh
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ background: type === "priceCO2" ? theme.palette.primary.main : "#aaa" }}
+              onClick={() => setType("priceCO2")}
+            >
+              CO<sub>2</sub>/
+              Price
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={10}>
+            <Line options={options} data={data} />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={2}
+            display="flex"
+            flexDirection={{ xs: "row", md: "column" }}
+            justifyContent="space-evenly"
           >
-            Price/MWh
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ background: type === "CO2" ? "#1976d2" : "#aaa" }}
-            onClick={() => setType("CO2")}
-          >
-            CO<sub>2</sub>/KWh
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ background: type === "priceCO2" ? "#1976d2" : "#aaa" }}
-            onClick={() => setType("priceCO2")}
-          >
-            CO<sub>2</sub>/
-            Price
-          </Button>
+            <Button
+              variant="contained"
+              sx={{ background: duration === "day" ? theme.palette.primary.main : "#aaa" }}
+              onClick={() => setDuration("day")}
+            >
+              1 Day
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ background: duration === "week" ? theme.palette.primary.main : "#aaa" }}
+              onClick={() => setDuration("week")}
+            >
+              1 Week
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ background: duration === "month" ? theme.palette.primary.main : "#aaa" }}
+              onClick={() => setDuration("month")}
+            >
+              1 Month
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={10}>
-          <Line options={options} data={data} />
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          md={2}
-          display="flex"
-          flexDirection={{ xs: "row", md: "column" }}
-          justifyContent="space-evenly"
-        >
-          <Button
-            variant="contained"
-            sx={{ background: duration === "day" ? "#1976d2" : "#aaa" }}
-            onClick={() => setDuration("day")}
-          >
-            1 Day
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ background: duration === "week" ? "#1976d2" : "#aaa" }}
-            onClick={() => setDuration("week")}
-          >
-            1 Week
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ background: duration === "month" ? "#1976d2" : "#aaa" }}
-            onClick={() => setDuration("month")}
-          >
-            1 Month
-          </Button>
-        </Grid>
-      </Grid>
+      </Paper>
     </Container>
-    </Paper>
   );
 }
 export default Statistics;

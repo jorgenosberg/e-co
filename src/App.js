@@ -38,9 +38,9 @@ export default function App() {
         maxWidth="100%"
         sx={{
           display: "flex",
-          height: "calc(100vh - 64px)",
+          height: "calc(100vh - 128px) !important",
           justifyContent: "center",
-          pt: "64px",
+          pt: "64px"
         }}
       >
         <Outlet />
@@ -98,7 +98,7 @@ export default function App() {
               <Route path="login" element={<LogIn />} />
               <Route path="/" element={<PrivateOutlet />}>
                 <Route path="/" element={<Home />} />
-                <Route path="/statistics" element={<Statistics />} />
+                <Route path="/statistics" element={<Statistics theme={theme} />} />
                 <Route path="/calculator" element={<Calculator />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/account" element={<Account colorMode={colorMode} theme={theme} />} />
