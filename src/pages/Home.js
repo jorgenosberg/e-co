@@ -12,18 +12,16 @@ import Co2Icon from '@mui/icons-material/Co2';
 import { fetchDayPrices } from "../api/stats";
 import { ReactComponent as HomeDecoration } from "../assets/home-decoration.svg";
 import { faker } from "@faker-js/faker";
-import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
-function Home() {
+function Home({ user }) {
   const navigate = useNavigate();
-  const user = React.useContext(UserContext);
   const [price, setPrice] = React.useState(0);
-  const [emissions] = React.useState(Number(randomNumberGenerator()));
+  const [emissions, setEmissions] = React.useState(randomNumberGenerator().toFixed(2));
 
   React.useEffect(() => {
     (async () => {
-      const response = await fetchDayPrices("FRA");
+      const response = await fetchDayPrices(user.statsRegion.code3);
       let date = new Date();
 
       if (date.getHours() < 8) {
@@ -31,9 +29,10 @@ function Home() {
         date.setHours(23);
       }
 
-      setPrice(response.values[date.getHours()]);
+      setPrice(response.values[date.getHours()].toFixed(2));
+      setEmissions(randomNumberGenerator().toFixed(2))
     })()
-  }, [])
+  }, [user])
 
   function randomNumberGenerator() {
     return faker.datatype.float({ min: 10, max: 70, precision: 0.01 });

@@ -110,11 +110,11 @@ export default function App() {
               <Route path="/signup" element={<SignUp colorMode={colorMode} theme={theme} />} />
               <Route path="login" element={<LogIn colorMode={colorMode} theme={theme} />} />
               <Route path="/" element={<PrivateOutlet />}>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home user={userData || {}} />} />
                 <Route path="/statistics" element={<Statistics theme={theme} userRegion={userData.statsRegion} />} />
                 <Route path="/calculator" element={<Calculator />} />
                 <Route path="/news" element={<News />} />
-                <Route path="/account" element={<Account colorMode={colorMode} theme={theme} user={userData} />} />
+                <Route path="/account" element={<Account colorMode={colorMode} theme={theme} user={userData || {}} />} />
                 <Route path="/settings" element={<Settings />} />
               </Route>
               <Route path="*" element={<PageNotFound />} />
