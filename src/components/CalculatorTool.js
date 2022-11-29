@@ -28,9 +28,6 @@ import ElectricCarIcon from "@mui/icons-material/ElectricCar";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 import MicrowaveIcon from "@mui/icons-material/Microwave";
 import axios from "axios";
-import { UserContext } from "../App";
-import { db } from "../api/firebase";
-import { onValue, ref } from "firebase/database";
 
 const averageKwhPerHour = {
   "Washing machine": { 30: 1.9, 40: 2.3, 60: 6.3, 90: 8.0 },
@@ -38,6 +35,15 @@ const averageKwhPerHour = {
   "Electric car": { "Wall charger": 1.32, Normal: 31.88, Fast: 48.52 },
   Shower: { Cold: 21.0, Normal: 37.0, Hot: 41.0 },
 };
+
+const defaultValues = {
+  "Washing machine": 40,
+  "Dryer": "Medium",
+  "Electric car": "Normal",
+  "Shower": "Normal",
+  "Heating": 20,
+  "Oven": 180
+}
 
 function CalculatorTool(props) {
   const [task, setTask] = React.useState("");
@@ -49,8 +55,11 @@ function CalculatorTool(props) {
   const [durationValue, setDurationValue] = React.useState(1);
   const [calculatedValue, setCalculatedValue] = React.useState("");
 
+  React.useEffect(() => {
+    setOptionValue(defaultValues[task])
+  }, [task])
+
   const calculate = async () => {
-    console.log(props.user)
     let today = new Date();
 
     if (today.getHours() < 8) {
@@ -65,7 +74,7 @@ function CalculatorTool(props) {
     const apiData = await axios.get(apiUrl);
     const pricePerMWh = apiData.data[currentHour].Value;
     const pricePerKWh = pricePerMWh / 1000;
-    console.log(pricePerKWh)
+
     if (type === "co2") {
       setCalculatedValue(
         (pricePerMWh / (Math.floor(Math.random() * (60 - 47)) + 47)).toFixed(2)
@@ -74,7 +83,7 @@ function CalculatorTool(props) {
       if (["Washing machine", "Dryer", "Electric car"].includes(task)) {
         setCalculatedValue(
           (
-            averageKwhPerHour[task][optionValue] *
+            (averageKwhPerHour[task][optionValue] || defaultValues[task]) *
             pricePerKWh *
             durationValue
           ).toFixed(2)
