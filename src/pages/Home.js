@@ -60,7 +60,7 @@ function Home({ user }) {
                 transition: "color 0.5s ease-in-out"
               },
             }),]}>
-              {user.email.split('@')[0]}
+              {user.email && user.email.split('@')[0]}
             </Typography>
             <Typography
               variant="h2"

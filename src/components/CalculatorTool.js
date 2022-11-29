@@ -39,7 +39,7 @@ const averageKwhPerHour = {
   Shower: { Cold: 21.0, Normal: 37.0, Hot: 41.0 },
 };
 
-function CalculatorTool() {
+function CalculatorTool(props) {
   const [task, setTask] = React.useState("");
   const [optionValue, setOptionValue] = React.useState(null);
   const [showOptions, setShowOptions] = React.useState(false);
@@ -48,33 +48,9 @@ function CalculatorTool() {
   const [type, setType] = React.useState("price");
   const [durationValue, setDurationValue] = React.useState(1);
   const [calculatedValue, setCalculatedValue] = React.useState("");
-  const [userCountry, setUserCountry] = React.useState({});
-
-  const user = React.useContext(UserContext);
-
-  React.useEffect(() => {
-    onValue(ref(db, `users/${user.uid}`), (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setUserCountry(data.country);
-      }
-    });
-  }, []);
-
-  const getUserCountry = async () => {
-    if (user !== null) {
-      const cca2Code = userCountry.code;
-      const countryData = await axios.get(
-        `https://restcountries.com/v3.1/alpha/${cca2Code}?fields=cca3`
-      );
-      return countryData.data.cca3;
-    } else {
-      return "FRA";
-    }
-  };
 
   const calculate = async () => {
-    let country = await getUserCountry();
+    console.log(props.user)
     let today = new Date();
 
     if (today.getHours() < 8) {
@@ -84,12 +60,12 @@ function CalculatorTool() {
 
     let todayFormatted = today.toLocaleDateString("en-CA");
     let currentHour = today.getHours();
-    let apiUrl = `https://api.iea.org/rte/price/hourly/${country}/timeseries?from=${todayFormatted}&to=${todayFormatted}&currency=local`;
+    let apiUrl = `https://api.iea.org/rte/price/hourly/${props.user.statsRegion.code3}/timeseries?from=${todayFormatted}&to=${todayFormatted}&currency=local`;
 
     const apiData = await axios.get(apiUrl);
     const pricePerMWh = apiData.data[currentHour].Value;
     const pricePerKWh = pricePerMWh / 1000;
-
+    console.log(pricePerKWh)
     if (type === "co2") {
       setCalculatedValue(
         (pricePerMWh / (Math.floor(Math.random() * (60 - 47)) + 47)).toFixed(2)
@@ -465,7 +441,7 @@ function CalculatorTool() {
             variant="contained"
             onClick={resetCalculator}
             endIcon={<DeleteOutlinedIcon />}
-            sx={{mx:1}}
+            sx={{ mx: 1 }}
           >
             RESET
           </Button>
@@ -473,7 +449,7 @@ function CalculatorTool() {
             variant="contained"
             onClick={calculate}
             endIcon={<StartIcon />}
-            sx={{mx:1}}
+            sx={{ mx: 1 }}
           >
             CALCULATE
           </Button>
@@ -482,7 +458,7 @@ function CalculatorTool() {
             id="outlined-read-only-input"
             label="Result"
             value={calculatedValue}
-            sx={{mx:1}}
+            sx={{ mx: 1 }}
             InputProps={{
               readOnly: true,
               endAdornment: (

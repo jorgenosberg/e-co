@@ -8,7 +8,7 @@ import HelpCenterIcon from "@mui/icons-material/HelpCenter";
 import Avatar from "@mui/material/Avatar";
 import Paper from "@mui/material/Paper";
 
-function Calculator() {
+function Calculator(props) {
   return (
     <Grid
       container
@@ -52,7 +52,7 @@ function Calculator() {
               <Typography variant="h4">Calculator</Typography>
             </Grid>
             <Grid item xs={12}>
-              <CalculatorTool />
+              <CalculatorTool user={props.user} />
             </Grid>
           </Grid>
         </Paper>
