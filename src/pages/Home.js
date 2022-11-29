@@ -19,8 +19,14 @@ function Home() {
   React.useEffect(() => {
     (async () => {
       const response = await fetchDayPrices("FRA");
-      const hour = new Date().getHours()
-      setPrice((response.values[hour] / 1000).toFixed(2));
+      let date = new Date();
+
+      if (date.getHours() < 8) {
+        date.setDate(date.getDate() - 1);
+        date.setHours(23);
+      }
+
+      setPrice((response.values[date.getHours()] / 1000).toFixed(2));
     })()
   }, [])
 

@@ -25,6 +25,8 @@ import { faker } from "@faker-js/faker";
 
 // APIs
 import { fetchDayPrices, fetchMonthPrices, fetchWeekPrices } from "../api/stats";
+import Paper from "@mui/material/Paper";
+
 
 ChartJS.register(
   CategoryScale,
@@ -173,6 +175,7 @@ function Statistics() {
   };
 
   return (
+    <Paper elevation={10} sx={{borderRadius: 10}}>
     <Container>
       <Grid container spacing={2} justifyContent="center">
         <Grid
@@ -281,6 +284,7 @@ function Statistics() {
         </Grid>
       </Grid>
     </Container>
+    </Paper>
   );
 }
 export default Statistics;

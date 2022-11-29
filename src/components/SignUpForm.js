@@ -3,7 +3,7 @@ import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import CountrySelector from "./CountrySelector";
+import CountrySelector, {phoneCountries} from "./CountrySelector";
 import PasswordField from "./PasswordField";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -111,7 +111,7 @@ function SignUpForm() {
           <PasswordField label={"Confirm password"} password={confirmPassword} setPassword={setConfirmPassword} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <CountrySelector value={country} setValue={setCountry} />
+          <CountrySelector value={country} setValue={setCountry} countries={phoneCountries} boxLabel="Country code" />
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField

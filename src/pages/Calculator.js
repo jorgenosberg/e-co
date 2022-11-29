@@ -5,10 +5,12 @@ import Grid from "@mui/material/Grid";
 import CalculatorTool from "../components/CalculatorTool";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import Avatar from "@mui/material/Avatar";
+import Paper from "@mui/material/Paper";
 
 function Calculator() {
   return (
     <Container>
+      <Paper elevation={6} sx={{py: 10, borderRadius: 10}}>
       <Grid container spacing={2}>
         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
           <Avatar><CalculateIcon /></Avatar>
@@ -20,6 +22,7 @@ function Calculator() {
           <CalculatorTool />
         </Grid>
       </Grid>
+      </Paper>
     </Container>
   );
 }
