@@ -7,7 +7,7 @@ import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import TextField from "@mui/material/TextField";
 
 function DurationSlider(props) {
-  
+
   function valueLabelFormat(value) {
     if (props.timeUnit === "hours") {
       return value <= 1 ? `${value} hour` : `${value} hours`;
@@ -33,7 +33,7 @@ function DurationSlider(props) {
         <Grid item xs={1}>
           <AccessTimeFilledIcon sx={{ color: "primary" }} />
         </Grid>
-        <Grid item xs={9} sx={{pr: 1}}>
+        <Grid item xs={9} sx={{ pr: 1 }}>
           <Slider
             value={typeof props.durationValue === "number" ? props.durationValue : 0}
             onChange={handleSliderChange}
@@ -43,36 +43,36 @@ function DurationSlider(props) {
             step={props.timeUnit === "hours" ? 0.5 : 1}
             marks={props.timeUnit === "hours" ?
               [
-              {
-                value: 0,
-                label: "0h"
-              },
-              {
-                value: 12,
-                label: "12hrs"
-              },
-              {
-                value: 24,
-                label: "24hrs"
-              }
-            ] :
-            [
-              {
-                value: 0,
-                label: "0min"
-              },
-              {
-                value: 30,
-                label: "30min"
-              },
-              {
-                value: 60,
-                label: "60min"
-              }
-            ]
-          }
+                {
+                  value: 0,
+                  label: "0h"
+                },
+                {
+                  value: 5,
+                  label: "5hrs"
+                },
+                {
+                  value: 10,
+                  label: "10hrs"
+                }
+              ] :
+              [
+                {
+                  value: 0,
+                  label: "0min"
+                },
+                {
+                  value: 30,
+                  label: "30min"
+                },
+                {
+                  value: 60,
+                  label: "60min"
+                }
+              ]
+            }
             min={0}
-            max={props.timeUnit === "hours" ? 24 : 60}
+            max={props.timeUnit === "hours" ? 10 : 60}
           />
         </Grid>
         <Grid item xs={2}>

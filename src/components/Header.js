@@ -102,8 +102,8 @@ function Header(props) {
                 <img
                   loading="lazy"
                   width="30"
-                  src={`https://flagcdn.com/w20/${props.userRegion.code.toLowerCase()}.png`}
-                  srcSet={`https://flagcdn.com/w40/${props.userRegion.code.toLowerCase()}.png 2x`}
+                  src={`https://flagcdn.com/w20/${(props.userRegion.code || "").toLowerCase()}.png`}
+                  srcSet={`https://flagcdn.com/w40/${(props.userRegion.code || "").toLowerCase()}.png 2x`}
                   alt="Selected region flag"
                 />
               </IconButton>
@@ -128,13 +128,14 @@ function Header(props) {
                 <MenuItem
                   key={option.code}
                   onClick={() => updateRegion(option)}
+                  selected={props.userRegion.code === option.code}
                 >
                   <Box sx={{ mr: 1 }}>
                     <img
                       loading="lazy"
                       width="20"
-                      src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                      srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                      src={`https://flagcdn.com/w20/${(option.code || "").toLowerCase()}.png`}
+                      srcSet={`https://flagcdn.com/w40/${(option.code || "").toLowerCase()}.png 2x`}
                       alt="Selected region flag"
                     />
                   </Box>

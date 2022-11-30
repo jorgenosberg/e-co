@@ -29,8 +29,8 @@ function CountrySelector({ value, setValue, countries, boxLabel }) {
           <img
             loading="lazy"
             width="20"
-            src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-            srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+            src={`https://flagcdn.com/w20/${(option.code || "").toLowerCase()}.png`}
+            srcSet={`https://flagcdn.com/w40/${(option.code || "").toLowerCase()}.png 2x`}
             alt=""
           />
           {option.phone ? (
@@ -54,8 +54,8 @@ function CountrySelector({ value, setValue, countries, boxLabel }) {
                 <img
                   loading="lazy"
                   width="20"
-                  src={`https://flagcdn.com/w20/${value.code.toLowerCase()}.png`}
-                  srcSet={`https://flagcdn.com/w40/${value.code.toLowerCase()}.png 2x`}
+                  src={`https://flagcdn.com/w20/${(value.code || "").toLowerCase()}.png`}
+                  srcSet={`https://flagcdn.com/w40/${(value.code || "").toLowerCase()}.png 2x`}
                   alt=""
                 />
               </InputAdornment>
