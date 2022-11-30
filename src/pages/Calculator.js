@@ -18,15 +18,15 @@ function Calculator(props) {
         alignItems: "center",
       }}
     >
-      <Grid item xs={6} md={6}>
+      <Grid item xs={12} lg={6}>
         <Paper
           elevation={10}
-          sx={{ py: 10, borderRadius: 10 }}
+          sx={{ py: 10, minHeight:700, borderRadius: 10 }}
         >
           <Grid
             container
             spacing={2}
-            sx={{ justifyContent: "center", alignItems: "center" }}
+            sx={{ justifyContent: "center", alignItems: "center", minWidth:"100%" }}
           >
             <Grid
               item
@@ -40,12 +40,12 @@ function Calculator(props) {
             >
               <Avatar
                 sx={{
-                  width: "70px",
-                  height: "70px",
+                  width: "50px",
+                  height: "50px",
                   backgroundColor: "secondary.main",
                 }}
               >
-                <CalculateIcon sx={{ fontSize: "45px" }} />
+                <CalculateIcon sx={{ fontSize: "35px" }} />
               </Avatar>
             </Grid>
             <Grid item xs={12} sx={{ textAlign: "center" }}>
@@ -60,7 +60,7 @@ function Calculator(props) {
       <Grid item xs={12} lg={6}>
         <Paper
           elevation={10}
-          sx={{ py: 10, borderRadius: 10 }}
+          sx={{ py: 10, minHeight:700, borderRadius: 10 }}
         >
           <Grid
             container
@@ -79,12 +79,12 @@ function Calculator(props) {
             >
               <Avatar
                 sx={{
-                  width: "70px",
-                  height: "70px",
+                  width: "50px",
+                  height: "50px",
                   backgroundColor: "secondary.main",
                 }}
               >
-                <HelpCenterIcon sx={{ fontSize: "45px" }} />
+                <HelpCenterIcon sx={{ fontSize: "35px" }} />
               </Avatar>
             </Grid>
             <Grid item xs={12} sx={{ textAlign: "center" }}>
@@ -190,6 +190,9 @@ function Calculator(props) {
             </Grid>
           </Grid>
         </Paper>
+      </Grid>
+      <Grid item xs={12} sx={{ textAlign: "center" }}>
+        <Box height="32px"></Box>
       </Grid>
     </Grid>
   );
