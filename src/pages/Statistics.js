@@ -6,7 +6,7 @@ import InsertChartIcon from "@mui/icons-material/InsertChart";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Paper from "@mui/material/Paper";
-import { db } from "../api/firebase";
+import Box from "@mui/material/Box";
 import CountrySelector, { regionMenuOptions } from "../components/CountrySelector";
 import {
   Chart as ChartJS,

@@ -21,7 +21,13 @@ const feedSources = {
     "https://feed.mikle.com/widget/v2/158265/?preloader-text=Loading",
 };
 
-function News() {
+const darkModeSources = {
+  energy: "https://feed.mikle.com/widget/v2/158279/?preloader-text=Loading",
+  emissions: "https://feed.mikle.com/widget/v2/158278/?preloader-text=Loading",
+  sustainability: "https://feed.mikle.com/widget/v2/158280/?preloader-text=Loading",
+};
+
+function News({theme}) {
   const [feed, setFeed] = React.useState("energy");
 
   return (
@@ -86,7 +92,7 @@ function News() {
               <Grid item xs={12}>
                 <iframe
                   title="newsfeed"
-                  src={feedSources[feed]}
+                  src={theme.palette.mode === "light" ? feedSources[feed] : darkModeSources[feed]}
                   height="303px"
                   width="100%"
                   class="fw-iframe"
@@ -147,7 +153,8 @@ function News() {
         >
           <iframe
             title="twitterfeed"
-            src="https://feed.mikle.com/widget/v2/158266/?preloader-text=Loading"
+            src={theme.palette.mode === "light" ? "https://feed.mikle.com/widget/v2/158266/?preloader-text=Loading" : "https://feed.mikle.com/widget/v2/158277/?preloader-text=Loading"}
+            // dark mode source https://feed.mikle.com/widget/v2/158277/?preloader-text=Loading
             height="674px"
             width="100%"
             class="fw-iframe"

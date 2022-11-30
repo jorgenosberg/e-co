@@ -15,7 +15,7 @@ import Stack from "@mui/material/Stack";
 import SaveIcon from "@mui/icons-material/Save";
 import Snackbar from "@mui/material/Snackbar";
 import Avatar from "@mui/material/Avatar";
-import EditNotificationsIcon from '@mui/icons-material/EditNotifications';
+import EditNotificationsIcon from "@mui/icons-material/EditNotifications";
 
 function Settings() {
   const [type, setType] = React.useState("price");
@@ -37,8 +37,18 @@ function Settings() {
 
   return (
     <Box>
-        <Avatar><EditNotificationsIcon /></Avatar>
-      <Typography variant="h5" fontWeight="bold">
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Avatar
+          sx={{
+            width: "50px",
+            height: "50px",
+            backgroundColor: "secondary.main",
+          }}
+        >
+          <EditNotificationsIcon sx={{ fontSize: "35px" }} />
+        </Avatar>
+      </Box>
+      <Typography variant="h5" fontWeight="bold" align="center">
         Notification Settings
       </Typography>
       <Divider />
@@ -89,7 +99,7 @@ function Settings() {
                   </Typography>
                 )}
               </InputAdornment>
-            )
+            ),
           }}
         />
       </Stack>
