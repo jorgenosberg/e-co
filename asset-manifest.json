@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/e-co/static/css/main.25b39c21.css",
-    "main.js": "/e-co/static/js/main.15ec9d82.js",
+    "main.js": "/e-co/static/js/main.d397f336.js",
     "static/media/euronews-logo.png": "/e-co/static/media/euronews-logo.3ad75b449070646e39f4.png",
     "static/media/financial-times-logo.png": "/e-co/static/media/financial-times-logo.360017a7a67634940eae.png",
     "static/media/logo-dark.svg": "/e-co/static/media/logo-dark.b546dcc5c15acc482a50e2a27c50d01e.svg",
@@ -9,10 +9,10 @@
     "index.html": "/e-co/index.html",
     "static/media/home-decoration.svg": "/e-co/static/media/home-decoration.62dac47056a53a8ed235827d5d4e3d30.svg",
     "main.25b39c21.css.map": "/e-co/static/css/main.25b39c21.css.map",
-    "main.15ec9d82.js.map": "/e-co/static/js/main.15ec9d82.js.map"
+    "main.d397f336.js.map": "/e-co/static/js/main.d397f336.js.map"
   },
   "entrypoints": [
     "static/css/main.25b39c21.css",
-    "static/js/main.15ec9d82.js"
+    "static/js/main.d397f336.js"
   ]
 }
