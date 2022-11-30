@@ -104,8 +104,8 @@ function Account(props) {
                   alignItems: "center",
                 }}
               >
-                <Avatar>
-                  <PaletteIcon />
+                <Avatar sx={{width:"50px", height:"50px", backgroundColor:"secondary.main"}}>
+                  <PaletteIcon sx={{fontSize: "35px"}}/>
                 </Avatar>
               </Grid>
               <Grid item xs={12}>
@@ -147,8 +147,8 @@ function Account(props) {
                   alignItems: "center",
                 }}
               >
-                <Avatar>
-                  <ManageAccountsIcon />
+                <Avatar sx={{width:"50px", height:"50px", backgroundColor:"secondary.main"}}>
+                  <ManageAccountsIcon sx={{fontSize:"35px"}}/>
                 </Avatar>
               </Grid>
               <Grid item xs={12}>
