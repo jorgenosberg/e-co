@@ -113,7 +113,7 @@ function Home({ user }) {
             </Box>
             <Typography variant="h4" textAlign="center">
               Current price of electricity {loading ? <Box><CircularProgress sx={{ alignSelf: "center" }} color={"secondary"} /></Box> : <><Box sx={{ color: "secondary.main", fontWeight: "bold" }}>{price}  €/MWh</Box>
-                <Chip color={price > avgDaily ? "error" : "secondary"} label={price > avgDaily ? `Above Daily Average: ${avgDaily.toFixed(2)}` : `Below Daily Average: ${avgDaily.toFixed(2)}`} /></>}
+                <Chip color={price > avgDaily ? "error" : "success"} label={price > avgDaily ? `Above Daily Average: ${avgDaily.toFixed(2)}` : `Below Daily Average: ${avgDaily.toFixed(2)}`} /></>}
             </Typography>
           </Paper>
         </Grid>
@@ -145,7 +145,7 @@ function Home({ user }) {
             </Box>
             <Typography variant="h4" textAlign="center">
               Current CO<sub>2</sub> emissions {loading ? <Box><CircularProgress sx={{ alignSelf: "center" }} color={"secondary"} /></Box> : <><Box sx={{ color: "secondary.light", fontWeight: "bold" }}>{emissions} g CO<sub>2</sub>eq/kWh</Box>
-                <Chip color={emissions > 51.19 ? "error" : "secondary"} label={emissions > 51.19 ? `Above Daily Average: 51.19` : `Below Daily Average: 51.19`} /></>}
+                <Chip color={emissions > 51.19 ? "error" : "success"} label={emissions > 51.19 ? `Above Daily Average: 51.19` : `Below Daily Average: 51.19`} /></>}
             </Typography>
           </Paper>
         </Grid>
