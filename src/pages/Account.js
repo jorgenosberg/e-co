@@ -12,6 +12,9 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import PhoneIcon from "@mui/icons-material/Phone";
 import InputAdornment from "@mui/material/InputAdornment";
 import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Avatar from "@mui/material/Avatar";
 import SaveIcon from "@mui/icons-material/Save";
 import Snackbar from "@mui/material/Snackbar";
@@ -134,7 +137,17 @@ function Account(props) {
                 </Grid>
                 <Grid item xs={12}>
                   <Typography variant="body2" fontWeight="bold">
-                    Preferred country:
+                    Preferred country:  <Tooltip
+                      title="The default country to use for fetching price and emission data and performing calculations"
+                      placement="right-start"
+                    >
+                      <IconButton sx={{ p: 0, float: "right" }}>
+                        <HelpOutlineIcon
+                          sx={{ color: "secondary.main" }}
+                          fontSize="small"
+                        />
+                      </IconButton>
+                    </Tooltip>
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>

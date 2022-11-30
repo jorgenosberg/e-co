@@ -14,13 +14,14 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import SaveIcon from "@mui/icons-material/Save";
 import Snackbar from "@mui/material/Snackbar";
+import Paper from "@mui/material/Paper";
 import Avatar from "@mui/material/Avatar";
 import EditNotificationsIcon from "@mui/icons-material/EditNotifications";
+
 
 function Settings() {
   const [type, setType] = React.useState("price");
   const [comparator, setComparator] = React.useState("below");
-
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -31,12 +32,11 @@ function Settings() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
   return (
-    <Box>
+    <Paper elevation={5} sx={{ borderRadius: 5, p: 5 }}>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Avatar
           sx={{
@@ -116,7 +116,7 @@ function Settings() {
           Settings updated successfully
         </Alert>
       </Snackbar>
-    </Box>
+    </Paper>
   );
 }
 

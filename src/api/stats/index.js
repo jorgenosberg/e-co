@@ -3,8 +3,6 @@ import axios from "axios";
 export const fetchDayPrices = async (country) => {
     try {
         const date = new Date().toLocaleDateString("en-CA");
-        console.log(country);
-        console.log(date);
         const response = await axios.get(`https://api.iea.org/rte/price/hourly/${country}/timeseries?from=${date}&to=${date}&currency=local`);
         return { values: response.data.map(a => a.Value), labels: response.data.map((a, i) => `${i}:00`) }
     } catch (e) {
@@ -25,4 +23,10 @@ export const fetchMonthPrices = async (country) => {
     const response = await axios.get(`https://api.iea.org/rte/price/${country}/timeseries?from=${start}&to=${end}&currency=local&precision=day`);
     const data = response.data.filter((a, i) => i % 2)
     return { values: data.map(a => a.Value), labels: data.map(a => a.Date.slice(5, 10).replace('-', '/')) }
+}
+
+export const fetchSummary = async (country) => {
+    const date = new Date().toLocaleDateString("en-CA");
+    const response = await axios.get(`https://api.iea.org/rte/price/hourly/${country}/summary?from=${date}&to=${date}&currency=local`)
+    return response.data;
 }
